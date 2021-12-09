@@ -28,6 +28,8 @@ const BigImageGalleryList = ({ projectList, selectedCatagoryId }: Props) => {
                     alt=""
                     width={100}
                     height={100}
+                    placeholder="blur"
+                    blurDataURL="/image/blur.png"
                   />
                 </AnimationImageWrap>
               </a>

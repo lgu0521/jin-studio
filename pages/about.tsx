@@ -68,6 +68,8 @@ const AboutPage: NextPage<Props> = ({ About }) => {
                         height={100}
                         layout="responsive"
                         objectFit="contain"
+                        placeholder="blur"
+                        blurDataURL="/image/blur.png"
                       />
                     </ImageWrap>
                   ) : null}

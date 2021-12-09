@@ -24,16 +24,16 @@ const Title2 = styled.h2`
   letter-spacing: -1px;
   line-height: 1.36;
   @media only screen and (max-width: 600px) {
-    font-size: 2rem;
+    font-size: ${(props) => props.theme.fontSizes.title2};
   }
   @media only screen and (min-width: 600px) {
-    font-size: 2.2rem;
+    font-size: ${(props) => props.theme.fontSizes.title2};
   }
   @media only screen and (min-width: 768px) {
-    font-size: 2.6rem;
+    font-size: ${(props) => props.theme.fontSizes.title2};
   }
   @media only screen and (min-width: 992px) {
-    font-size: 3rem;
+    font-size: ${(props) => props.theme.fontSizes.title2};
   }
   @media only screen and (min-width: 1200px) {
     font-size: ${(props) => props.theme.fontSizes.title2};

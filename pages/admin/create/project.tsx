@@ -103,7 +103,6 @@ const AdminCreateNotice: NextPage<StaticProps> = ({ CatagoryList }) => {
     const nowformItem = [...formItemList];
     const [reorderedItem] = nowformItem.splice(result.source.index, 1);
     nowformItem.splice(result.destination.index, 0, reorderedItem);
-    console.log(nowformItem);
     setFormItemList(nowformItem);
   };
 

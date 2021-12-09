@@ -1,5 +1,5 @@
 import { DragDropContext, Draggable, Droppable, resetServerContext } from "react-beautiful-dnd";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import S from "../../../styles/AdminPage.style";
 import {
     PageMaxNoCSSLayout,
@@ -27,8 +27,11 @@ type StaticProps = {
 }
 
 const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet }) => {
-    console.log(projectContet.content);
-    const [formItemList, setFormItemList] = useState<formItem[]>(projectContet.content);
+    const [winReady, setwinReady] = useState(false);
+    useEffect(() => {
+        setwinReady(true);
+    }, []);
+    const [formItemList, setFormItemList] = useState<formItem[]>(projectContet.content ? projectContet.content : []);
     const [projectTitle, setProjectTitle] = useState<string>(projectContet.title);
     const [projectCatagory, setProjectCatagory] = useState<string>(projectContet.catagory);
     const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<formItem>({
@@ -126,7 +129,6 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
 
     const handleOnDragEnd = (result: any) => {
         if (!result.destination) return;
-        console.log(result);
         const nowformItem = [...formItemList];
         const [reorderedItem] = nowformItem.splice(result.source.index, 1);
         nowformItem.splice(result.destination.index, 0, reorderedItem);
@@ -134,7 +136,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
     };
 
     return (
-        <PageMaxNoCSSLayout>
+        winReady ? (<PageMaxNoCSSLayout>
             <PageMainContentMargin>
                 <Title2
                     style={{
@@ -228,7 +230,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                     저장
                 </S.Button>
             </PageMainContentMargin>
-        </PageMaxNoCSSLayout>
+        </PageMaxNoCSSLayout>) : <p>Loading</p>
     );
 };
 

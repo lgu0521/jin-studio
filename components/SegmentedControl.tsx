@@ -11,37 +11,20 @@ type Props = {
   setValue: (id: string) => void;
 };
 const SegmentedControl = ({ options, setValue }: Props) => {
-  const [isSegementWrapClick, setIsSegementWrapClick] = useState(false);
-  const SegementRef = useRef<any>();
-
-  useEffect(() => {
-    window.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      window.removeEventListener('mousedown', handleClickOutside);
-    }
-  }, []);
-
-  const handleClickOutside = (e: MouseEvent) => {
-    console.log(isSegementWrapClick);
-    if (!SegementRef.current?.contains(e.target)) {
-      setIsSegementWrapClick(false);
-    }
-  }
-
+  const [stateValue, setSateValue] = useState<number>(0);
   return (
     <>
       <div style={{ float: "right" }}>
-        <SegmentedMainUl clickState={isSegementWrapClick} ref={SegementRef}>
+        <SegmentedMainUl>
           <SegmentedMainLi >
-            <MainLabel htmlFor="0" onClick={() => setIsSegementWrapClick(!isSegementWrapClick)} />
-            <input type="radio" id="0" name="segments" onChange={() => setValue("0")} />
-            <SegmentedUl clickState={isSegementWrapClick}>
+            <MainLabel htmlFor="0" isClick={stateValue != 0 ? true : false} />
+            <SegmentedUl>
               {options.map((option, i) => (
-                <SegmentedLi key={i}>
-                  <label htmlFor={option.id}>
+                <SegmentedLi key={i} isClickNum={stateValue} >
+                  <label htmlFor={option.id} onClick={() => { setSateValue(i) }} >
                     <Title2>{option.name}</Title2>
                   </label>
-                  <input type="radio" id={option.id} name="segments" onChange={() => setValue(option.id)} />
+                  <input type="radio" id={option.id} name="segments" onChange={() => setValue(option.default ? '0' : option.id)} />
                 </SegmentedLi>
               ))}
             </SegmentedUl>
@@ -53,75 +36,100 @@ const SegmentedControl = ({ options, setValue }: Props) => {
 };
 
 const slideDown = keyframes`
-  0%{
+  0% {
+
     height: 0px;
   }
   50%{
     height: 45px;
   }
   100%{
-    height: 100px;
+    height: 500px;
   }
 `
-const complexMixin = css`
-  animation: linear ${slideDown} 0.1s forwards;
-`
 
-const SegmentedMainUl = styled.ul<{ clickState: boolean }>`
+const SegmentedMainUl = styled.ul`
   width: 100%;
   clear: both;
 `;
 
-const SegmentedMainLi = styled.li`
-    position: relative;
+const SegmentedUl = styled.ul`
+  display: none;
+  position: absolute;
+  z-index: 9999;
+  text-align: center;
+  overflow: hidden;
+  //inline-block 여백없애기
+  margin-top: -1px;
 `;
 
-const MainLabel = styled.label`
+const MainLabel = styled.label<{ isClick: boolean }>`
   display: inline-block;
   position: relative;
-  z-index: 5000;
+  z-index: 9999;
   border: 3px solid #000000;
-  width: 150px;
-  height: 36px;
   font-weight: 600;
+  transition: .25s;
+  width: 50px;
+  height: 36px;
   :before{
     content: '';
     position: absolute;
-    background: url('/svg/sildeDown.svg') no-repeat;
+    background: url('/svg/sildeDown-black.svg') no-repeat;
     top: 50%;
     left: 50%;
     width: 24px;
     height: 24px;
-    transform: translate(-50%, -30%);
+    transform: translate(-50%, -20%);
   }
-`
+  :after{
+    content: '';
+    position: ${(props) => props.isClick ? 'absolute' : 'relative'};
+    background: url('/svg/ellipse.svg') no-repeat;
+    top: -10px;
+    right: -10px;
+    width: 18px;
+    height: 18px;
+  }
 
-const SegmentedUl = styled.ul<{ clickState: boolean }>`
-  display: ${(props) => props.clickState ? 'block' : 'none'};
-  position: absolute;
-  padding: 0;
-  margin: 0;
-  left: 0;
-  z-index: 9999;
-  overflow: hidden;
-  text-align: right;
-  ${(props) => props.clickState ? complexMixin : null};
+`
+const SegmentedMainLi = styled.li`
+    position: relative;
+    :hover{
+    ${SegmentedUl}{
+      display:block !important;
+      animation: linear ${slideDown} 0.45s forwards;
+    };
+    ${MainLabel}{
+      width: 150px;
+    }
+  }
 `;
 
-const SegmentedLi = styled.li`
+const SegmentedLi = styled.li<{ isClickNum: number }>`
+  display:flex;
+  :nth-child(${(props) => props.isClickNum + 1}){
+    label{
+      background: black;
+    color:white;
+    }
+  }
+
   label{
-    display: inline-block;
+   display: block;
     position: relative;
-    z-index: 5000;
+    z-index: 9999;
+    border-top: none !important;
     border: 3px solid #000000;
     width: 150px;
-    padding: 10px 5px;
+    height:36px;
     background: white;
     font-weight: 600;
+    transition: .3s;
     :hover{
-    background: black;
-    color: white;
-  }
+      background: black;
+      color: white;
+    }
   }
 `;
 

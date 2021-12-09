@@ -75,6 +75,8 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
                           height={100}
                           layout="responsive"
                           objectFit="contain"
+                          placeholder="blur"
+                          blurDataURL="/image/blur.png"
                         />
                       </ImageWrap>
                     ) : null}
