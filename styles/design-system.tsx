@@ -4,13 +4,13 @@ const Title1 = styled.h1`
   letter-spacing: -1px;
   line-height: 1.3;
   @media only screen and (max-width: 600px) {
-    font-size: 3rem;
+    font-size: ${(props) => props.theme.fontSizes.title1};
   }
   @media only screen and (min-width: 600px) {
-    font-size: ${(props) => props.theme.fontSizes.title2};
+    font-size: ${(props) => props.theme.fontSizes.title1};
   }
   @media only screen and (min-width: 768px) {
-    font-size: 4rem;
+    font-size: ${(props) => props.theme.fontSizes.title1};
   }
   @media only screen and (min-width: 992px) {
     font-size: ${(props) => props.theme.fontSizes.title1};
@@ -41,23 +41,22 @@ const Title2 = styled.h2`
 `;
 
 const Title3 = styled.h3`
-  letter-spacing: 0px;
-  line-height: 1.28;
+  letter-spacing: -1px;
+  line-height: 1.36;
   @media only screen and (max-width: 310px) {
-    letter-spacing: 0px !important;
-    font-size: 0.8rem;
+    font-size: ${(props) => props.theme.fontSizes.title3};
   }
   @media only screen and (min-width: 310px) {
-    font-size: ${(props) => props.theme.fontSizes.title8};
+    font-size: ${(props) => props.theme.fontSizes.title3};
   }
   @media only screen and (min-width: 600px) {
-    font-size: ${(props) => props.theme.fontSizes.title6};
+    font-size: ${(props) => props.theme.fontSizes.title3};
   }
   @media only screen and (min-width: 768px) {
-    font-size: ${(props) => props.theme.fontSizes.title5};
+    font-size: ${(props) => props.theme.fontSizes.title3};
   }
   @media only screen and (min-width: 992px) {
-    font-size: ${(props) => props.theme.fontSizes.title5};
+    font-size: ${(props) => props.theme.fontSizes.title3};
   }
   @media only screen and (min-width: 1200px) {
     font-size: ${(props) => props.theme.fontSizes.title3};
@@ -151,10 +150,11 @@ const Button = styled.button<PropsType>`
 `;
 
 const PageMaxNoCSSLayout = styled.div`
-  max-width: 1200px;
+  max-width: 1240px;
   width: 100%;
   margin: 0 auto;
-  @media only screen and (max-width: 600px) {
+  padding: 0px 20px;
+  /* @media only screen and (max-width: 600px) {
     padding: 0 20px;
   }
   @media only screen and (min-width: 600px) {
@@ -168,7 +168,7 @@ const PageMaxNoCSSLayout = styled.div`
   }
   @media only screen and (min-width: 1200px) {
     padding: 0px;
-  }
+  } */
 `;
 const MarginOrPaddingLayout = styled.div`
   margin: 80px 0px;

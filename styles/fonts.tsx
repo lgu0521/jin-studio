@@ -56,8 +56,7 @@ export default createGlobalStyle`
   font-style: normal;
   font-weight: 300;
   src: url(/fonts/open-sans-condensed-v15-latin-300.eot); /* IE9 Compat Modes */
-  src: local(''),
-       url(/fonts/open-sans-condensed-v15-latin-300.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
+  src: url(/fonts/open-sans-condensed-v15-latin-300.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
        url(/fonts/open-sans-condensed-v15-latin-300.woff2) format('woff2'), /* Super Modern Browsers */
        url(/fonts/open-sans-condensed-v15-latin-300.woff) format('woff'), /* Modern Browsers */
        url(/fonts/open-sans-condensed-v15-latin-300.ttf) format('truetype'), /* Safari, Android, iOS */
@@ -71,8 +70,7 @@ export default createGlobalStyle`
   font-style: italic;
   font-weight: 300;
   src: url(/fonts/open-sans-condensed-v15-latin-300italic.eot); /* IE9 Compat Modes */
-  src: local(''),
-       url(/fonts/open-sans-condensed-v15-latin-300italic.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
+  src: url(/fonts/open-sans-condensed-v15-latin-300italic.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
        url(/fonts/open-sans-condensed-v15-latin-300italic.woff2) format('woff2'), /* Super Modern Browsers */
        url(/fonts/open-sans-condensed-v15-latin-300italic.woff) format('woff'), /* Modern Browsers */
        url(/fonts/open-sans-condensed-v15-latin-300italic.ttf) format('truetype'), /* Safari, Android, iOS */
@@ -86,8 +84,7 @@ export default createGlobalStyle`
   font-style: normal;
   font-weight: 700;
   src: url(/fonts/open-sans-condensed-v15-latin-700.eot); /* IE9 Compat Modes */
-  src: local(''),
-       url(/fonts/open-sans-condensed-v15-latin-700.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
+  src: url(/fonts/open-sans-condensed-v15-latin-700.eot?#iefix) format('embedded-opentype'), /* IE6-IE8 */
        url(/fonts/open-sans-condensed-v15-latin-700.woff2) format('woff2'), /* Super Modern Browsers */
        url(/fonts/open-sans-condensed-v15-latin-700.woff) format('woff'), /* Modern Browsers */
        url(/fonts/open-sans-condensed-v15-latin-700.ttf) format('truetype'), /* Safari, Android, iOS */

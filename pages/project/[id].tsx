@@ -90,7 +90,7 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
       <PageMaxNoCSSLayout>
         <BigImageGalleryList
           projectList={projectThumnailList}
-          selectedCatagoryId="0"
+          selectedCatagoryId="all"
         />
       </PageMaxNoCSSLayout>
     </>
@@ -117,10 +117,26 @@ export const getServerSideProps: GetServerSideProps = async ({ params }: Params)
     },
   };
 };
+
 const ContentSection = styled.div`
-  padding: 100px 200px;
   margin-bottom: 140px;
   text-align: center;
+  // 프로젝트 옆 마진 설정
+  @media only screen and (max-width: 600px) {
+    padding: 100px 0px;
+  }
+  @media only screen and (min-width: 600px) {
+    padding: 100px 0px;
+  }
+  @media only screen and (min-width: 768px) {
+    padding: 100px 0px;
+  }
+  @media only screen and (min-width: 992px) {
+    padding: 100px 100px;
+  }
+  @media only screen and (min-width: 1200px) {
+    padding: 100px 200px;
+  }
 `;
 const BackgroundColorWithPageFullWidthLayout = styled(PageFullWidthLayout)`
   background-color: ${(props) => props.theme.colors.bg_content};

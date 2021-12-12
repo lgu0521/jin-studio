@@ -8,13 +8,31 @@ type Props = {
   setValue: (catagoryId: string) => void;
 };
 
-const SegmentedControl = ({ options, setValue }: Props) => {
+const MoblieSegmentedControl = ({ options, setValue }: Props) => {
+  const [isOutSideClick, setIsOutSideClick] = useState(false);
   const [stateValue, setSateValue] = useState<number>(0);
+  const outSideClickRef = useRef<any>();
+
+  useEffect(() => {
+    window.addEventListener('mousedown', handleOurSideClickEvent);
+    return () => {
+      window.removeEventListener('mousedown', handleOurSideClickEvent);
+    }
+  }, []);
+
+  const handleOurSideClickEvent = (e: MouseEvent) => {
+    if (!outSideClickRef.current.contains(e.target)) {
+      setIsOutSideClick(false);
+    }
+    console.log(isOutSideClick);
+  }
+
+
   return (
     <>
       <SegmentedMainUl>
         <SegmentedMainLi>
-          <MainButton isClick={stateValue > 0 ? true : false} />
+          <MainButton isClick={stateValue > 0 ? true : false} ref={outSideClickRef} onClick={() => setIsOutSideClick(!isOutSideClick)} />
           <SegmentedUl>
             {options.map((option, i) => (
               <SegmentedLi key={i} isClickNum={stateValue} >
@@ -127,4 +145,4 @@ const SegmentedLi = styled.li<{ isClickNum: number }>`
 
 
 
-export default SegmentedControl;
+export default MoblieSegmentedControl;

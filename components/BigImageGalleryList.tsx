@@ -56,16 +56,34 @@ const ImageGalleryWrap = styled.div`
 
 const ImageGalleryUl = styled.ul`
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  grid-gap: 15px;
   width: 100%;
   height: 100%;
   margin: auto;
+  @media only screen and (max-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 8px;
+  }
+  @media only screen and (min-width: 600px) {
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 10px;
+  }
+  @media only screen and (min-width: 768px) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+  }
+  @media only screen and (min-width: 992px) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 10px;
+  }
+  @media only screen and (min-width: 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 15px;
+  }
 `;
 
 const ImageGalleryli = styled.li<{ selectedCatagory: string; projectCatagory: string; }>`
   display: ${(props) =>
-    props.selectedCatagory == "0"
+    props.selectedCatagory == "all"
       ? "block"
       : props.selectedCatagory != props.projectCatagory
         ? "none"
