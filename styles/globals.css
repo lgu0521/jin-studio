@@ -162,7 +162,12 @@ input {
 .thumbs-wrapper {
   margin: 10px 20px 0px 20px !important;
 }
-
+.carousel .thumb {
+  border: 1px solid #fff !important;
+}
+.carousel .thumb.selected, .carousel .thumb:hover {
+  border: 3px solid #d3d3d3 !important;
+}
 .carousel .control-next.control-arrow:before {
   border-left: 15px solid black !important;
 }

@@ -75,7 +75,7 @@ const Layout = ({ logo, children, title = "This is the default title" }: Props) 
       <footer>
         <FooterLayout>
           <div style={{borderTop: "3px solid black"}}>
-          <Title3>All content copy right ZinZinstudio 2012-2021 ©</Title3>
+          <Title3>All content copyright ZinZinstudio 2012-2021 ©</Title3>
           </div>
         </FooterLayout>
       </footer>
