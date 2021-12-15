@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { PageMaxNoCSSLayout } from "../../styles/design-system";
 import S from "../../styles/AdminPage.style";
+import {useAuth} from '../../modules/AuthProvider';
 
 const AdminLoginPage = () => {
     const { user, SignInWithEmailAndPassword, LoginOut } = useAuth();
