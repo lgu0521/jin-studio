@@ -160,17 +160,17 @@ input {
 }
 
 .thumbs-wrapper {
-  margin: 10px 15px 0px 15px !important;
+  margin: 10px 20px 0px 20px !important;
 }
 
 .carousel .control-next.control-arrow:before {
   border-left: 15px solid black !important;
 }
 .control-prev{
-  left: -15px !important;
+  left: -10px !important;
 }
 .control-next{
-  right: -15px !important;
+  right: -10px !important;
 }
 .carousel .control-prev.control-arrow:before {
   border-right: 15px solid #000000 !important;
@@ -192,7 +192,7 @@ input {
 body{
   padding-top: 65px;
 }
-.thum > img{
+.carousel .thumb img{
   object-fit: cover;
 }
 @media only screen and (max-width: 600px) {
