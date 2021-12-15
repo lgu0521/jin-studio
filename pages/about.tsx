@@ -99,9 +99,27 @@ export const getStaticProps: GetStaticProps = async () => {
 
 
 const ContentSection = styled.div`
-  padding: 0px 200px;
-  margin-bottom: 140px;
   text-align: center;
+  @media only screen and (max-width: 600px) {
+    padding: 30px 0px;
+    margin-bottom: 30px;
+  }
+  @media only screen and (min-width: 600px) {
+    margin-bottom: 60px;
+    padding: 60px 0px;
+  }
+  @media only screen and (min-width: 768px) {
+    margin-bottom: 80px;
+    padding: 80px 0px;
+  }
+  @media only screen and (min-width: 992px) {
+    margin-bottom: 100px;
+    padding: 100px 100px;
+  }
+  @media only screen and (min-width: 1200px) {
+    margin-bottom: 120px;
+    padding: 120px 200px;
+  }
 `;
 
 const ImageWrap = styled.div`

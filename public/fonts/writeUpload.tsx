@@ -1,4 +1,4 @@
-import { TuiEditorWithForwardedProps } from "../modules/Editor";
+import { TuiEditorWithForwardedProps } from "../../modules/Editor";
 import { EditorProps, Editor } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
 import React, { useRef } from "react";
@@ -6,7 +6,7 @@ type Props = {
   item: any;
 };
 const TuiNoSSRWrapper = dynamic<TuiEditorWithForwardedProps>(
-  () => import("../modules/Editor"),
+  () => import("../../modules/Editor"),
   {
     ssr: false,
     loading: () => <p>Loading . . .</p>,

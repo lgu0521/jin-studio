@@ -2,7 +2,6 @@ import { useRouter } from "next/dist/client/router";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { PageMaxNoCSSLayout } from "../../styles/design-system";
-import { useAuth } from "../../modules/AuthProvider";
 import S from "../../styles/AdminPage.style";
 
 const AdminLoginPage = () => {

@@ -40,10 +40,10 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
       <BackgroundColorWithPageFullWidthLayout>
         <PageMaxNoCSSLayout>
           <PageMainContentMargin>
-            <ContentSection className="rkdms">
+            <ContentSection>
               {projectContet
                 ? projectContet.content.map((item: any, i: number) =>
-                  <div key={i}>
+                  <ContentDetail key={i}>
                     {item.type == "write" ? (
                       <TuiWrapper initialValue={item.item.markDownContent} />
                     ) : item.type == "gallery" ? (
@@ -52,7 +52,7 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
                           showThumbs={true}
                           showStatus={false}
                           infiniteLoop
-                          // emulateTouch
+                          showIndicators={false}
                           // autoPlay
                           showArrows={false}
                           useKeyboardArrows
@@ -80,7 +80,7 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
                         />
                       </ImageWrap>
                     ) : null}
-                  </div>
+                  </ContentDetail>
                 )
                 : null}
             </ContentSection>
@@ -88,10 +88,12 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
         </PageMaxNoCSSLayout>
       </BackgroundColorWithPageFullWidthLayout>
       <PageMaxNoCSSLayout>
+        <ImageGalleryWrap>
         <BigImageGalleryList
           projectList={projectThumnailList}
           selectedCatagoryId="all"
         />
+        </ImageGalleryWrap>
       </PageMaxNoCSSLayout>
     </>
   );
@@ -118,24 +120,56 @@ export const getServerSideProps: GetServerSideProps = async ({ params }: Params)
   };
 };
 
-const ContentSection = styled.div`
-  margin-bottom: 140px;
-  text-align: center;
-  // 프로젝트 옆 마진 설정
+const ImageGalleryWrap = styled.div`
+  overflow-y: scroll;
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
   @media only screen and (max-width: 600px) {
-    padding: 100px 0px;
+    max-height: 30vh;
   }
   @media only screen and (min-width: 600px) {
-    padding: 100px 0px;
+    max-height: 60vh;
   }
   @media only screen and (min-width: 768px) {
-    padding: 100px 0px;
+    max-height: 90vh;
   }
   @media only screen and (min-width: 992px) {
+    max-height: 110vh;
+  }
+  @media only screen and (min-width: 1200px) {
+    max-height: 130vh;
+  }
+`;
+
+const ContentDetail = styled.div`
+  
+`;
+
+const ContentSection = styled.div`
+  text-align: center;
+  @media only screen and (max-width: 600px) {
+    padding: 30px 0px;
+    margin-bottom: 30px;
+  }
+  @media only screen and (min-width: 600px) {
+    margin-bottom: 60px;
+    padding: 60px 0px;
+  }
+  @media only screen and (min-width: 768px) {
+    margin-bottom: 80px;
+    padding: 80px 0px;
+  }
+  @media only screen and (min-width: 992px) {
+    margin-bottom: 100px;
     padding: 100px 100px;
   }
   @media only screen and (min-width: 1200px) {
-    padding: 100px 200px;
+    margin-bottom: 120px;
+    padding: 120px 200px;
   }
 `;
 const BackgroundColorWithPageFullWidthLayout = styled(PageFullWidthLayout)`

@@ -8,7 +8,7 @@ import {
 } from "../../../styles/design-system";
 import ImageGalleryUpload from "../../../components/ImageGalleryUpload";
 import ImageUpload from "../../../components/ImageUpload";
-import WriteUpload from "../../../components/writeUpload";
+import WriteUpload from "../../../public/fonts/writeUpload";
 import GetImageStorage from "../../../modules/GetImageStorage";
 import { GetStaticProps, NextPage } from "next";
 import { ProjectCatagoryDTO } from "../../../interfaces/project-catagory.dto";

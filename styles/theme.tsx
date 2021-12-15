@@ -1,9 +1,8 @@
 const calcEm = (size: number) => `${size}rem`;
 
 const fontSizes = {
-  title8: calcEm(0.8),
   title7: calcEm(1.0),
-  title6: calcEm(1.1),
+  title6: calcEm(1.2),
   title5: calcEm(1.3),
   title4: calcEm(1.5),
   title3: calcEm(1.8),

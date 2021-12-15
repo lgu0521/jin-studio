@@ -5,7 +5,6 @@ import { useState } from "react";
 import BigImageGalleryList from "../components/BigImageGalleryList";
 import { PageMaxNoCSSLayout, PageMainContentMargin } from "../styles/design-system";
 import SegmentedControl from "../components/SegmentedControl";
-import MoblieSegmentedControl from "../components/MoblieSegmentedControl";
 import { ProjectSimpleDTO } from "../interfaces/project.dto";
 import { ProjectCatagoryDTO } from "../interfaces/project-catagory.dto";
 import styled from "styled-components";
@@ -19,20 +18,20 @@ const IndexPage: NextPage<Props> = ({ projectThumnailList, CatagoryList }) => {
   const [currentCatagoryId, setUserCatagoryId] = useState<string>("all");
 
   return (
-    <PageMaxNoCSSLayout>
+    <MainPageMaxNoCSSLayout>
       <Compontent1Wrap>
-        <MoblieSegmentedControl
+        <SegmentedControl
           options={CatagoryList}
           setValue={(newValue) => setUserCatagoryId(newValue)}
         />
       </Compontent1Wrap>
-      <Compontent2Wrap>
+      <ImageGalleryWrap>
         <BigImageGalleryList
           projectList={projectThumnailList}
           selectedCatagoryId={currentCatagoryId}
         />
-      </Compontent2Wrap>
-    </PageMaxNoCSSLayout>
+        </ImageGalleryWrap>
+    </MainPageMaxNoCSSLayout>
   );
 };
 
@@ -58,10 +57,52 @@ export const getStaticProps: GetStaticProps = async () => {
 };
 
 const Compontent1Wrap = styled.div`
-  margin: 120px 0px 24px 0px;
+  @media only screen and (max-width: 479px) {
+    margin-bottom: 8px;
+  }
+  @media only screen and (min-width: 480px) {
+    margin-bottom: 13px;
+  }
+  @media only screen and (min-width: 768px) {
+    margin-bottom: 18px;
+  }
+  @media only screen and (min-width: 992px) {
+    margin-bottom: 23px;
+  }
+  @media only screen and (min-width: 1200px) {
+    margin-bottom: 25px;
+  }
 `
-
-const Compontent2Wrap = styled.div`
-  clear: both;
+const ImageGalleryWrap = styled.div`
+  @media only screen and (max-width: 600px) {
+  }
+  @media only screen and (min-width: 600px) {
+  }
+  @media only screen and (min-width: 768px) {
+    overflow-y: scroll;
+    max-height: 130vh;
+    ::-webkit-scrollbar {
+      display: none;
+    }
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+`;
+const MainPageMaxNoCSSLayout = styled(PageMaxNoCSSLayout)`
+  @media only screen and (max-width: 600px) {
+    margin-top: 30px;
+  }
+  @media only screen and (min-width: 600px) {
+    margin-top: 45px;
+  }
+  @media only screen and (min-width: 768px) {
+    margin-top: 60px;
+  }
+  @media only screen and (min-width: 992px) {
+    margin-top: 75px;
+  }
+  @media only screen and (min-width: 1200px) {
+    margin-top: 90px;
+  }
 `
 export default IndexPage;

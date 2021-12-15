@@ -9,19 +9,45 @@ type Props = {
 };
 
 const SegmentedControl = ({ options, setValue }: Props) => {
-  const [stateValue, setSateValue] = useState<number>(0);
+  const [isOutSideClick, setIsOutSideClick] = useState(false);
+  const [stateValue, setSateValue] = useState<number>(-1);
+  const outSideClickRef = useRef<any>();
+
+  useEffect(() => {
+    window.addEventListener('mousedown', handleOurSideClickEvent);
+    return () => {
+      window.removeEventListener('mousedown', handleOurSideClickEvent);
+    }
+  }, []);
+
+  const handleOurSideClickEvent = (e: MouseEvent) => {
+    if (!outSideClickRef.current.contains(e.target)) {
+      setIsOutSideClick(false);
+    }
+    console.log(stateValue);
+  }
+  const getUserClickCatagory = (catagoryIndex: number, catagoryId: string) =>{
+    if(stateValue== catagoryIndex){
+      setSateValue(-1);
+      setValue('all');
+    }else{
+      setSateValue(catagoryIndex);
+      setValue(catagoryId);
+    }
+  }
+
   return (
     <>
       <SegmentedMainUl>
         <SegmentedMainLi>
-          <MainButton isClick={stateValue > 0 ? true : false} />
+          <MainButton isClick={stateValue > -1 ? true : false} ref={outSideClickRef} onClick={() => setIsOutSideClick(!isOutSideClick)} />
           <SegmentedUl>
             {options.map((option, i) => (
               <SegmentedLi key={i} isClickNum={stateValue} >
-                <label htmlFor={option.id} onClick={() => { setSateValue(i) }} >
+                <label htmlFor={option.id} onClick={() => getUserClickCatagory(i, option.id)} >
                   <Title2>{option.name}</Title2>
                 </label>
-                <input type="radio" id={option.id} name="segments" onChange={() => setValue(option.default ? 'all' : option.id)} />
+                <input type="radio" id={option.id} name="segments"/>
               </SegmentedLi>
             ))}
           </SegmentedUl>
@@ -50,7 +76,6 @@ const SegmentedMainUl = styled.ul`
 
 const SegmentedUl = styled.ul`
   display: none;
-  z-index: 5555;
   text-align: center;
   overflow: hidden;
   //inline-block 여백없애기
@@ -62,8 +87,6 @@ const SegmentedUl = styled.ul`
 
 const MainButton = styled.div<{ isClick: boolean }>`
   position: relative;
-  z-index: 9999;
-  border: 3px solid #000000;
   font-weight: 600;
   transition: .25s;
   width: 50px;
@@ -71,23 +94,69 @@ const MainButton = styled.div<{ isClick: boolean }>`
   :before{
     content: '';
     position: absolute;
-    background: url('/svg/sildeDown-black.svg') no-repeat;
     top: 50%;
-    left: 50%;
-    width: 24px;
-    height: 24px;
-    transform: rotate(-0.25turn) translate(55%, -20%);
+    transform: rotate(-0.13turn) translate(55%, -20%);
+    @media only screen and (max-width: 600px) {
+      width: 8px;
+      height: 8px;
+      left: 25%;
+      border-bottom: 2px solid black;
+      border-right: 2px solid black;
+    }
+    @media only screen and (min-width: 600px) {
+      left: 25%;
+      width: 10px;
+      height: 10px;
+      border-bottom: 2px solid black;
+      border-right: 2px solid black;
+    }
+    @media only screen and (min-width: 768px) {
+      left: 15%;
+      width: 12px;
+      height: 12px;
+      border-bottom: 3px solid black;
+      border-right: 3px solid black;
+    }
   }
   :after{
     content: '';
     position: ${(props) => props.isClick ? 'absolute' : 'relative'};
-    background: url('/svg/ellipse.svg') no-repeat;
-    top: -10px;
-    left: -10px;
-    width: 18px;
-    height: 18px;
+    border-radius: 100%;
+    background-color: black;
+    @media only screen and (max-width: 600px) {
+      top: -5px;
+      left: -5px;
+      width: 10px;
+      height: 10px;
+    }
+    @media only screen and (min-width: 600px) {
+      top: -8px;
+      left: -8px;
+      width: 13px;
+      height: 13px;
+    }
+    @media only screen and (min-width: 768px) {
+      top: -10px;
+      left: -10px;
+      width: 18px;
+      height: 18px;
+    }
   }
-
+  @media only screen and (max-width: 600px) {
+    width: 40px;
+    height: 26px;
+    border: 2px solid #000000;
+  }
+  @media only screen and (min-width: 600px) {
+    width: 45px;
+    height: 30px;
+    border: 2px solid #000000;
+  }
+  @media only screen and (min-width: 768px) {
+    width: 50px;
+    height: 36px;
+    border: 3px solid #000000;
+  }
 `
 const SegmentedMainLi = styled.li`
     position: relative;
@@ -104,16 +173,16 @@ const SegmentedLi = styled.li<{ isClickNum: number }>`
   :nth-child(${(props) => props.isClickNum + 1}){
     label{
       background: black;
-    color:white;
+      color:white;
     }
   }
   label{
-   display: block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-content: center;
     position: relative;
-    z-index: 5555;
     border-left: 0px !important;
-    border: 3px solid #000000;
-    height:36px;
     padding: 0px 15px;
     background: white;
     font-weight: 600;
@@ -121,6 +190,18 @@ const SegmentedLi = styled.li<{ isClickNum: number }>`
     :hover{
       background: black;
       color: white;
+    }
+    @media only screen and (max-width: 600px) {
+      height: 26px;
+      border: 2px solid #000000;
+    }
+    @media only screen and (min-width: 600px) {
+      height: 30px;
+      border: 2px solid #000000;
+    }
+    @media only screen and (min-width: 768px) {
+      height: 36px;
+      border: 3px solid #000000;
     }
   }
 `;

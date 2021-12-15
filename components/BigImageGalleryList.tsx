@@ -10,7 +10,6 @@ interface Props {
 const BigImageGalleryList = ({ projectList, selectedCatagoryId }: Props) => {
   console.log(selectedCatagoryId);
   return (
-    <ImageGalleryWrap>
       <ImageGalleryUl>
         {projectList.map((project, i) => (
           <ImageGalleryli
@@ -37,22 +36,9 @@ const BigImageGalleryList = ({ projectList, selectedCatagoryId }: Props) => {
           </ImageGalleryli>
         ))}
       </ImageGalleryUl>
-    </ImageGalleryWrap>
   );
 };
 
-const ImageGalleryWrap = styled.div`
-  max-height: 130vh;
-  border-bottom: 3px solid ${(props) => props.theme.colors.line};
-  overflow-y: scroll;
-  /* Hide scrollbar for Chrome, Safari and Opera */
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  /* Hide scrollbar for IE, Edge and Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-  scrollbar-width: none; /* Firefox */
-`;
 
 const ImageGalleryUl = styled.ul`
   display: grid;
@@ -77,7 +63,7 @@ const ImageGalleryUl = styled.ul`
   }
   @media only screen and (min-width: 1200px) {
     grid-template-columns: repeat(4, 1fr);
-    grid-gap: 15px;
+    grid-gap: 13px;
   }
 `;
 
@@ -105,11 +91,28 @@ const AnimationImageWrap = styled.div`
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      font-size: 22px;
-      transition: .3s;
+      transition: .1s;
       transition-property: .2s;
       margin-top: -200px;
       opacity: 0;
+      @media only screen and (max-width: 310px) {
+        font-size: ${(props) => props.theme.fontSizes.title7};
+      }
+      @media only screen and (min-width: 310px) {
+        font-size: ${(props) => props.theme.fontSizes.title7};
+      }
+      @media only screen and (min-width: 600px) {
+        font-size: ${(props) => props.theme.fontSizes.title5};
+      }
+      @media only screen and (min-width: 768px) {
+        font-size: ${(props) => props.theme.fontSizes.title4};
+      }
+      @media only screen and (min-width: 992px) {
+        font-size: ${(props) => props.theme.fontSizes.title3};
+      }
+      @media only screen and (min-width: 1200px) {
+        font-size: ${(props) => props.theme.fontSizes.title3};
+      }
     }
 
     :after{
@@ -121,7 +124,7 @@ const AnimationImageWrap = styled.div`
       width:100%;
       height: 100%;
       background-color: rgb(0,0,0,.8);
-      transition: .3s;
+      transition: .1s;
       opacity: 0;
       margin-top: 200px;
     }
