@@ -36,7 +36,7 @@ const AboutPage: NextPage<Props> = ({ About }) => {
           <ContentSection className="rkdms">
             {About
               ? About.content.map((item: any, i: number) =>
-                <div key={i}>
+                <ContentDetail key={i}>
                   {item.type == "write" ? (
                     <TuiWrapper initialValue={item.item.markDownContent} />
                   ) : item.type == "gallery" ? (
@@ -64,16 +64,14 @@ const AboutPage: NextPage<Props> = ({ About }) => {
                     <ImageWrap>
                       <Image
                         src={item.item.downloadUrl}
-                        width={100}
-                        height={100}
-                        layout="responsive"
-                        objectFit="contain"
+                        layout="fill"
                         placeholder="blur"
                         blurDataURL="/image/blur.png"
+                        className="unset-image"
                       />
                     </ImageWrap>
                   ) : null}
-                </div>
+                </ContentDetail>
               )
               : null}
           </ContentSection>
@@ -97,34 +95,40 @@ export const getStaticProps: GetStaticProps = async () => {
   };
 };
 
+const ContentDetail = styled.div`
+    margin-bottom: 15px;
+`;
 
 const ContentSection = styled.div`
   text-align: center;
   @media only screen and (max-width: 600px) {
-    padding: 30px 0px;
+    padding: 30px 0px 15px;
     margin-bottom: 30px;
   }
   @media only screen and (min-width: 600px) {
-    margin-bottom: 60px;
+    margin-bottom: 60px 0px 45px;
     padding: 60px 0px;
   }
   @media only screen and (min-width: 768px) {
-    margin-bottom: 80px;
+    margin-bottom: 80px 0px 65px;
     padding: 80px 0px;
   }
   @media only screen and (min-width: 992px) {
-    margin-bottom: 100px;
+    margin-bottom: 100px 0px 85px;
     padding: 100px 100px;
   }
   @media only screen and (min-width: 1200px) {
-    margin-bottom: 120px;
+    margin-bottom: 120px 0px 105px;
     padding: 120px 200px;
   }
 `;
 
 const ImageWrap = styled.div`
-width: 100%;
-height: auto;
+  width: 100%;
+  span {
+    position: relative !important;
+    height: unset !important;
+  }
 `;
 
 const GalleryWrap = styled.div`

@@ -71,12 +71,10 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
                       <ImageWrap>
                         <Image
                           src={item.item.downloadUrl}
-                          width={100}
-                          height={100}
-                          layout="responsive"
-                          objectFit="contain"
+                          layout="fill"
                           placeholder="blur"
                           blurDataURL="/image/blur.png"
+                          className="unset-image"
                         />
                       </ImageWrap>
                     ) : null}
@@ -146,29 +144,29 @@ const ImageGalleryWrap = styled.div`
 `;
 
 const ContentDetail = styled.div`
-  
+    margin-bottom: 15px;
 `;
 
 const ContentSection = styled.div`
   text-align: center;
   @media only screen and (max-width: 600px) {
-    padding: 30px 0px;
+    padding: 30px 0px 15px;
     margin-bottom: 30px;
   }
   @media only screen and (min-width: 600px) {
-    margin-bottom: 60px;
+    margin-bottom: 60px 0px 45px;
     padding: 60px 0px;
   }
   @media only screen and (min-width: 768px) {
-    margin-bottom: 80px;
+    margin-bottom: 80px 0px 65px;
     padding: 80px 0px;
   }
   @media only screen and (min-width: 992px) {
-    margin-bottom: 100px;
+    margin-bottom: 100px 0px 85px;
     padding: 100px 100px;
   }
   @media only screen and (min-width: 1200px) {
-    margin-bottom: 120px;
+    margin-bottom: 120px 0px 105px;
     padding: 120px 200px;
   }
 `;
@@ -177,8 +175,11 @@ const BackgroundColorWithPageFullWidthLayout = styled(PageFullWidthLayout)`
 `;
 
 const ImageWrap = styled.div`
-width: 100%;
-height: auto;
+  width: 100%;
+  span {
+    position: relative !important;
+    height: unset !important;
+  }
 `;
 
 const GalleryWrap = styled.div`
