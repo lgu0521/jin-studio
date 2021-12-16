@@ -8,18 +8,13 @@ import {
 import { ImageStoreageDTO } from "../interfaces/image-storage.dto";
 import firebase from "../service/FirebaseConfig";
 
-const GetImageStorage = async (
-  ImageFile: File,
-  id: string
-): Promise<ImageStoreageDTO> => {
+const GetImageStorage = async (ImageFile: File, id: string): Promise<ImageStoreageDTO> => {
   var imageData = {} as ImageStoreageDTO;
   const d: Date = new Date();
   try {
-    const firestorage: FirebaseStorage = getStorage(
-      firebase,
-      process.env.NEXT_PUBLIC_FIREBASE_DATA_BASEURL
-    );
-    const refStorage = ref(firestorage, "Project/" + d + id);
+    console.log(ImageFile);
+    const firestorage: FirebaseStorage = getStorage(firebase, "gs://jin-studio.appspot.com");
+    const refStorage = ref(firestorage, "Project/" + d + id + ImageFile.name);
     await uploadBytes(refStorage, ImageFile);
     const downloadUrlPromise = await getDownloadURL(refStorage);
     imageData = {

@@ -32,19 +32,14 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
     const [formItemList, setFormItemList] = useState<formItem[]>(projectContet.content ? projectContet.content : []);
     const [projectTitle, setProjectTitle] = useState<string>(projectContet.title);
     const [projectCatagory, setProjectCatagory] = useState<string>(projectContet.catagory);
-    const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<formItem>({
-        order: 0,
-        type: "image",
-        item: { ...projectContet.thumbnail }
-    });
+    const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<any>({ ...projectContet.thumbnail });
 
     const onSubmit = async () => {
         const finalItemList: any[] = [];
-        if (!projectThumbnailLocalUrl.item.downloadUrl) {
-            const newThumnail = await GetImageStorage(projectThumbnailLocalUrl.item, "thumbnail");
-            setProjectThumbnailLocalUrl({ ...projectThumbnailLocalUrl, item: newThumnail });
+        var newThumnail: any;
+        if (!projectThumbnailLocalUrl.downloadUrl) {
+            newThumnail = await GetImageStorage(projectThumbnailLocalUrl, "thumbnail");
         }
-
         await Promise.all(
             formItemList.map(async (item, i) => {
                 switch (item.type) {
@@ -52,20 +47,22 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                         if (!item.item.downloadUrl) {
                             item.item = await GetImageStorage(item.item, "image" + i);
                         }
-                        finalItemList.push({ ...item});
+                        finalItemList.push({ ...item });
                         break;
                     case "gallery":
                         const imageList: any[] = [];
-                        await Promise.all(item.item.map(async (file: File, i: number) => {
-                            if (!item.item.downloadUrl) {
-                                item.item = await GetImageStorage(item.item, "gallery" + i);
+                        console.log(item.item);
+                        await Promise.all(item.item.map(async (imageStorage: any, i: number) => {
+                            if (!imageStorage.downloadUrl) {
+                                imageStorage = await GetImageStorage(imageStorage, "gallery" + i);
                             }
-                            imageList.push({ ...item, order: i });
+                            imageList.push({ ...imageStorage, order: i });
                         }));
+                        console.log(imageList);
                         finalItemList.push({ ...item, item: imageList });
                         break;
                     case "write":
-                        if (!item.item.markDownContent) {
+                        if (item.item.markDownContent) {
                             finalItemList.push({ ...item, item: item.item, });
                         } else {
                             finalItemList.push({ ...item, item: { markDownContent: item.item }, });
@@ -74,14 +71,14 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                 }
             })
         );
-        
+        await formItemList.map((item, index) => item.order = index);
         const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/update", {
             method: "POST",
             body: JSON.stringify({
                 id: projectContet.id,
                 title: projectTitle,
                 catagory: projectCatagory,
-                thumbnail: projectThumbnailLocalUrl,
+                thumbnail: newThumnail? newThumnail : projectThumbnailLocalUrl,
                 content: finalItemList,
             }),
         });
@@ -92,13 +89,13 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
         const nowformItem = [...formItemList];
         switch (type) {
             case "image":
-                nowformItem.push({ order: nowformItem.length, type: "image" });
+                nowformItem.push({ order: nowformItem.length, type: "image", item: {} });
                 break;
             case "gallery":
-                nowformItem.push({ order: nowformItem.length, type: "gallery" });
+                nowformItem.push({ order: nowformItem.length, type: "gallery", item: []  });
                 break;
             case "write":
-                nowformItem.push({ order: nowformItem.length, type: "write" });
+                nowformItem.push({ order: nowformItem.length, type: "write", item: {}  });
                 break;
         }
         setFormItemList(nowformItem);
@@ -110,7 +107,6 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
         const nowformItem = [...formItemList];
         const [reorderedItem] = nowformItem.splice(result.source.index, 1);
         nowformItem.splice(result.destination.index, 0, reorderedItem);
-        nowformItem.map((item, index) => item.order = index);
         setFormItemList(nowformItem);
     };
 
@@ -130,7 +126,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                 <S.InputWrap>
                     <S.Label>썸네일 이미지</S.Label>
                     <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
-                    <ImageUpload id="thumbnail-image" item={projectThumbnailLocalUrl} />
+                    <ImageUpload id="thumbnail-image" defaultImage={projectThumbnailLocalUrl.downloadUrl} onImageUpload={(file:File)=> setProjectThumbnailLocalUrl(file)}/>
                 </S.InputWrap>
                 <S.InputWrap>
                     <S.Label>프로젝트 카테고리</S.Label>
@@ -154,7 +150,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                                                     <S.InputWrap>
                                                         <S.Label>단일 이미지</S.Label>
                                                         <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
-                                                        <ImageUpload id={"image" + item.order} item={item} />
+                                                        <ImageUpload id={"image" + item.order} defaultImage={item.item.downloadUrl? item.item.downloadUrl: null} onImageUpload={(file:File)=> item.item = file}/>
                                                     </S.InputWrap>
                                                 ) : item.type == "write" ? (
                                                     <S.InputWrap>
@@ -165,7 +161,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                                                     <S.InputWrap>
                                                         <S.Label>이미지 갤러리</S.Label>
                                                         <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
-                                                        <ImageGalleryUpload id={"imageGallery" + item.order} item={item} />
+                                                        <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file:FileList[])=> item.item = file}/>
                                                     </S.InputWrap>
                                                 ) : null}
                                             </li>

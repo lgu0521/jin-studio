@@ -5,12 +5,13 @@ import styled from "styled-components";
 
 type Props = {
   id: string;
-  item: any;
+  defaultImages: any;
+  onImageUpload: (file: FileList[]) => void;
 };
 
-const ImageGalleryUpload = ({ id, item }: Props) => {
+const ImageGalleryUpload = ({ id, defaultImages, onImageUpload }: Props) => {
   resetServerContext();
-  const [myImage, setMyImage] = useState<any>(item.item ? item.item : []);
+  const [myImage, setMyImage] = useState<any>(defaultImages ? defaultImages : []);
   const [imageFileList, setImageFileList] = useState<FileList[]>([]);
 
   const addImage = (e: any) => {
@@ -27,7 +28,7 @@ const ImageGalleryUpload = ({ id, item }: Props) => {
     }
     setImageFileList(nowImageFileList);
     setMyImage(nowImageUrlList);
-    item.item = nowImageFileList;
+    onImageUpload(nowImageFileList);
   };
 
   const handleOnDragEnd = (result: any) => {
@@ -35,6 +36,7 @@ const ImageGalleryUpload = ({ id, item }: Props) => {
     const items = [...myImage];
     const [reorderedItem] = items.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
+    onImageUpload(items);
     setMyImage(items);
   };
 
@@ -49,25 +51,16 @@ const ImageGalleryUpload = ({ id, item }: Props) => {
           <DragDropContext onDragEnd={handleOnDragEnd}>
             <Droppable droppableId="galleryImage">
               {(provided) => (
-                <DroppableUl
-                  {...provided.droppableProps}
-                  ref={provided.innerRef}
-                >
-                  <>
-                    {myImage.map((item: any, index: number) => (
-                      <Draggable key={"imageDraggable" + item.order} draggableId={"imageDraggable" + item.order} index={index}>
-                        {(provided) => (
-                          <DroppableLi
-                            ref={provided.innerRef}
-                            {...provided.dragHandleProps}
-                            {...provided.draggableProps}
-                          >
-                            <Image src={item.downloadUrl} height={100} width={100} />
-                          </DroppableLi>
-                        )}
-                      </Draggable>
-                    ))}
-                  </>
+                <DroppableUl {...provided.droppableProps} ref={provided.innerRef}>
+                  {myImage.map((item: any, index: number) => (
+                    <Draggable key={"imageDraggable" + item.order} draggableId={"imageDraggable" + item.order} index={index}>
+                      {(provided) => (
+                        <DroppableLi ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
+                          <Image src={item.downloadUrl} height={100} width={100} />
+                        </DroppableLi>
+                      )}
+                    </Draggable>
+                  ))}
                   {provided.placeholder}
                 </DroppableUl>
               )}

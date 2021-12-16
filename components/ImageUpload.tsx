@@ -3,13 +3,14 @@ import { useState } from "react";
 import styled from "styled-components";
 type Props = {
   id: string;
-  item: any;
+  defaultImage: string | null;
+  onImageUpload: (file: File) => void;
 };
-const ImageUpload = ({ id, item }: Props) => {
-  const [myImage, setMyImage] = useState<string>(item.item ? item.item.downloadUrl as string : '');
+const ImageUpload = ({ id, defaultImage, onImageUpload }: Props) => {
+  const [myImage, setMyImage] = useState<string>(defaultImage ? defaultImage : '');
 
   const addImage = (e: any) => {
-    item.item = e.target.files[0];
+    onImageUpload(e.target.files[0]);
     const nowImageUrl = URL.createObjectURL(e.target.files[0]);
     setMyImage(nowImageUrl);
   };

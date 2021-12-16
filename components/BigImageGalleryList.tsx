@@ -8,7 +8,7 @@ interface Props {
   selectedCatagoryId: string;
 }
 const BigImageGalleryList = ({ projectList, selectedCatagoryId }: Props) => {
-  console.log(selectedCatagoryId);
+  console.log(projectList[0].title);
   return (
       <ImageGalleryUl>
         {projectList.map((project, i) => (
@@ -19,7 +19,7 @@ const BigImageGalleryList = ({ projectList, selectedCatagoryId }: Props) => {
           >
             <Link href={"/project/" + project.id}>
               <a>
-                <AnimationImageWrap>
+                <AnimationImageWrap projectTitle={project.title}>
                   <Image
                     layout="responsive"
                     src={project.thumbnail.downloadUrl}
@@ -77,12 +77,12 @@ const ImageGalleryli = styled.li<{ selectedCatagory: string; projectCatagory: st
 `;
 
 
-const AnimationImageWrap = styled.div`
+const AnimationImageWrap = styled.div<{projectTitle: string}>`
   position: relative;
   cursor: pointer;
   overflow: hidden;
     :before{
-      content:'하마가 꿀꺽';
+      content: '${(props) => props.projectTitle? props.projectTitle : '제목 없음'}';
       position: absolute;
       width: 100%;
       z-index: 1;
