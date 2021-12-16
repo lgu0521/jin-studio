@@ -128,7 +128,7 @@ const ImageGalleryWrap = styled.div`
   scrollbar-width: none;
 
   @media only screen and (max-width: 600px) {
-    max-height: 30vh;
+    max-height: 40vh;
   }
   @media only screen and (min-width: 600px) {
     max-height: 60vh;
