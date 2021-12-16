@@ -125,7 +125,7 @@ const AdminCreateNotice: NextPage = () => {
                                                             사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
                                                             URL을 넣어주세요.
                                                         </S.Description>
-                                                        <ImageUpload id={"image" + item.order} item={item} />
+                                                        <ImageUpload id={"image" + item.order} defaultImage={item.item.downloadUrl? item.item.downloadUrl: null} onImageUpload={(file:File)=> item.item = file}/>
                                                     </S.InputWrap>
                                                 ) : item.type == "write" ? (
                                                     <S.InputWrap>
@@ -134,7 +134,7 @@ const AdminCreateNotice: NextPage = () => {
                                                             사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
                                                             URL을 넣어주세요.
                                                         </S.Description>
-                                                        <WriteUpload item={item} />
+                                                        <WriteUpload defaultValue={item}/>
                                                     </S.InputWrap>
                                                 ) : item.type == "gallery" ? (
                                                     <S.InputWrap>
@@ -143,7 +143,7 @@ const AdminCreateNotice: NextPage = () => {
                                                             사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
                                                             URL을 넣어주세요.
                                                         </S.Description>
-                                                        <ImageGalleryUpload id={"imageGallery" + item.order} item={item} />
+                                                        <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file:FileList[])=> item.item = file}/>
                                                     </S.InputWrap>
                                                 ) : null}
                                             </li>
