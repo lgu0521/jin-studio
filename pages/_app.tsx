@@ -5,15 +5,31 @@ import type { AppProps } from "next/app";
 import { ThemeProvider } from "styled-components";
 import GlobalFonts from "../styles/fonts";
 import Layout from "../components/Layout";
-import { GetStaticProps } from "next";
+import { useEffect } from "react";
+import NProgress from 'nprogress';
+import Router from "next/router";
+import '../public/nprogress.css'
 
-type initialProps = {
-  logoUrl: string;
-};
-const MyApp = (
-  { Component, pageProps }: AppProps,
-  { logoUrl }: initialProps
-) => {
+const MyApp = ({ Component, pageProps }: AppProps) => {
+  useEffect(() => {
+    const handleStart = (url: string) => {
+      NProgress.start()
+    }
+    const handleStop = () => {
+      NProgress.done()
+    }
+
+    Router.events.on('routeChangeStart', handleStart)
+    Router.events.on('routeChangeComplete', handleStop)
+    Router.events.on('routeChangeError', handleStop)
+
+    return () => {
+      Router.events.off('routeChangeStart', handleStart)
+      Router.events.off('routeChangeComplete', handleStop)
+      Router.events.off('routeChangeError', handleStop)
+    }
+  }, [Router])
+  
   return (
     <ThemeProvider theme={theme}>
       <GlobalFonts />
@@ -22,15 +38,6 @@ const MyApp = (
       </Layout>
     </ThemeProvider>
   );
-};
-
-export const getStaticPros: GetStaticProps = async () => {
-  return {
-    props: {
-      logoUrl:
-        "https://firebasestorage.googleapis.com/v0/b/jin-studio.appspot.com/o/Logo%2Flogo.png?alt=media&token=060f16b5-fe29-460f-8a3e-a788e3b956f1",
-    },
-  };
 };
 
 export default MyApp;
