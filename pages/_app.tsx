@@ -17,10 +17,7 @@ const MyApp = (
   return (
     <ThemeProvider theme={theme}>
       <GlobalFonts />
-      <Layout
-        title="Home | Next.js + TypeScript Example"
-        logo="https://firebasestorage.googleapis.com/v0/b/jin-studio.appspot.com/o/Logo%2Flogo.png?alt=media&token=060f16b5-fe29-460f-8a3e-a788e3b956f1"
-      >
+      <Layout>
         <Component {...pageProps} />
       </Layout>
     </ThemeProvider>

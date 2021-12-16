@@ -2,16 +2,15 @@ import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import Head from "next/head";
 import styled from "styled-components";
-import { PageMaxNoCSSLayout, Title1, Title2, Title3 } from "../styles/design-system";
+import { PageMaxNoCSSLayout, Title1, Title3 } from "../styles/design-system";
 import Logo from '../public/svg/header_logo.svg';
 import Hamberger from '../public/svg/hamberger.svg';
+
 type Props = {
   children?: ReactNode;
-  title?: string;
-  logo: string;
 };
 
-const Layout = ({ logo, children, title = "This is the default title" }: Props) => {
+const Layout = ({ children }: Props) => {
   const [clickBtn, setClickBtn] = useState(false);
   const sideClickRef = useRef<any>();
   useEffect(() =>{
@@ -30,7 +29,7 @@ const Layout = ({ logo, children, title = "This is the default title" }: Props) 
   return (
     <div>
       <Head>
-        <title>{title}</title>
+        <title>studiozinzin</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>

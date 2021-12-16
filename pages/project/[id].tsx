@@ -50,13 +50,14 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
                       <GalleryWrap>
                         <Carousel
                           showThumbs={true}
-                          showStatus={false}
+                          showStatus={true}
                           infiniteLoop
                           showIndicators={false}
-                          // autoPlay
+                          dynamicHeight={true}
                           showArrows={false}
                           useKeyboardArrows
                           transitionTime={600}
+                          thumbWidth={110}
                         // axis="vertical"
                         // selectedItem={1}
                         >
@@ -144,14 +145,25 @@ const ImageGalleryWrap = styled.div`
 `;
 
 const ContentDetail = styled.div`
+  @media only screen and (max-width: 600px) {
+    margin-bottom: 10px;
+  }
+  @media only screen and (min-width: 600px) {
+    margin-bottom: 10px;
+  }
+  @media only screen and (max-width: 769px) {
+    margin-bottom: 10px;
+  }
+  @media only screen and (min-width: 780px) {
     margin-bottom: 15px;
+  }
 `;
 
 const ContentSection = styled.div`
   text-align: center;
   @media only screen and (max-width: 600px) {
     padding: 30px 0px 15px;
-    margin: 30px;
+    margin-bottom: 30px;
   }
   @media only screen and (min-width: 600px) {
     margin: 60px 0px 45px;

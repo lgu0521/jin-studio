@@ -3,7 +3,7 @@ import { EditorProps, Editor } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
 import React, { useRef } from "react";
 type Props = {
-  item: any;
+  defaultValue: any;
 };
 const TuiNoSSRWrapper = dynamic<TuiEditorWithForwardedProps>(
   () => import("../../modules/Editor"),
@@ -20,12 +20,12 @@ const TuiWrapper = React.forwardRef((props: EditorProps, ref) => (
 ));
 TuiWrapper.displayName = "Editor";
 
-const WriteUpload = ({ item }: Props) => {
+const WriteUpload = ({ defaultValue }: Props) => {
   const editorRef = useRef<Editor>(null);
 
   const editorRefChange = () => {
     if (editorRef.current) {
-      item.item = editorRef.current.getInstance().getMarkdown();
+      defaultValue.item = editorRef.current.getInstance().getMarkdown();
     }
   };
 
@@ -36,7 +36,7 @@ const WriteUpload = ({ item }: Props) => {
       useCommandShortcut={true}
       ref={editorRef}
       onChange={editorRefChange}
-      initialValue={item.item ? item.item.markDownContent : ''}
+      initialValue={defaultValue.item ? defaultValue.item.markDownContent : ''}
     />
   );
 };

@@ -49,7 +49,7 @@ const AdminCreateNotice: NextPage = () => {
             item.order = (index as number) + 1;
         });
 
-        const res = await fetch("http://localhost:3001/api/about/create", {
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/about/create", {
             method: "POST",
             body: JSON.stringify({
                 content: itemList,

@@ -28,124 +28,97 @@ type StaticProps = {
 
 const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet }) => {
     const [winReady, setwinReady] = useState(false);
-    useEffect(() => {
-        setwinReady(true);
-    }, []);
+    useEffect(() => { setwinReady(true); }, []);
     const [formItemList, setFormItemList] = useState<formItem[]>(projectContet.content ? projectContet.content : []);
     const [projectTitle, setProjectTitle] = useState<string>(projectContet.title);
     const [projectCatagory, setProjectCatagory] = useState<string>(projectContet.catagory);
     const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<formItem>({
         order: 0,
         type: "image",
-        item: {
-            downloadUrl: projectContet.thumbnail.downloadUrl
-        }
+        item: { ...projectContet.thumbnail }
     });
 
     const onSubmit = async () => {
-        const itemList: any[] = [];
-        var projectThumbnail;
-        if (projectThumbnailLocalUrl.item.downloadUrl) {
-            projectThumbnail = projectContet.thumbnail;
-        } else {
-            projectThumbnail = await GetImageStorage(projectThumbnailLocalUrl.item, "thumbnail");
+        const finalItemList: any[] = [];
+        if (!projectThumbnailLocalUrl.item.downloadUrl) {
+            const newThumnail = await GetImageStorage(projectThumbnailLocalUrl.item, "thumbnail");
+            setProjectThumbnailLocalUrl({ ...projectThumbnailLocalUrl, item: newThumnail });
         }
 
         await Promise.all(
             formItemList.map(async (item, i) => {
                 switch (item.type) {
                     case "image":
-                        var imageStorage;
-                        if (item.item.downloadUrl) {
-                            imageStorage = item.item;
-                        } else {
-                            imageStorage = await GetImageStorage(item.item, "image" + i);
+                        if (!item.item.downloadUrl) {
+                            item.item = await GetImageStorage(item.item, "image" + i);
                         }
-                        itemList.push({ ...item, item: imageStorage, });
+                        finalItemList.push({ ...item});
                         break;
                     case "gallery":
                         const imageList: any[] = [];
                         await Promise.all(item.item.map(async (file: File, i: number) => {
-                            if (item.item.downloadUrl) {
-                                imageStorage = item.item;
-                            } else {
-                                imageStorage = await GetImageStorage(item.item, "gallery" + i);
+                            if (!item.item.downloadUrl) {
+                                item.item = await GetImageStorage(item.item, "gallery" + i);
                             }
-                            imageList.push({ ...imageStorage, order: i });
+                            imageList.push({ ...item, order: i });
                         }));
-                        itemList.push({ ...item, item: imageList });
+                        finalItemList.push({ ...item, item: imageList });
                         break;
                     case "write":
-                        if (item.item.markDownContent) {
-                            itemList.push({ ...item, item: item.item, });
+                        if (!item.item.markDownContent) {
+                            finalItemList.push({ ...item, item: item.item, });
                         } else {
-                            itemList.push({ ...item, item: { markDownContent: item.item }, });
+                            finalItemList.push({ ...item, item: { markDownContent: item.item }, });
                         }
                         break;
                 }
             })
         );
-
-        formItemList.map((item, index) => {
-            item.order = (index as number);
-        });
-
-        const res = await fetch("http://localhost:3001/api/project/update", {
+        
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/update", {
             method: "POST",
             body: JSON.stringify({
                 id: projectContet.id,
                 title: projectTitle,
                 catagory: projectCatagory,
-                thumbnail: projectThumbnail,
-                content: itemList,
+                thumbnail: projectThumbnailLocalUrl,
+                content: finalItemList,
             }),
         });
     };
 
+    // 문제없음
     const formItemAdd = (type: string) => {
         const nowformItem = [...formItemList];
         switch (type) {
             case "image":
-                nowformItem.push({
-                    order: nowformItem.length,
-                    type: "image"
-                });
+                nowformItem.push({ order: nowformItem.length, type: "image" });
                 break;
             case "gallery":
-                nowformItem.push({
-                    order: nowformItem.length,
-                    type: "gallery"
-                });
+                nowformItem.push({ order: nowformItem.length, type: "gallery" });
                 break;
             case "write":
-                nowformItem.push({
-                    order: nowformItem.length,
-                    type: "write"
-                });
+                nowformItem.push({ order: nowformItem.length, type: "write" });
                 break;
         }
         setFormItemList(nowformItem);
     };
 
+    //문제없음
     const handleOnDragEnd = (result: any) => {
         if (!result.destination) return;
         const nowformItem = [...formItemList];
         const [reorderedItem] = nowformItem.splice(result.source.index, 1);
         nowformItem.splice(result.destination.index, 0, reorderedItem);
+        nowformItem.map((item, index) => item.order = index);
         setFormItemList(nowformItem);
     };
 
     return (
         winReady ? (<PageMaxNoCSSLayout>
             <PageMainContentMargin>
-                <Title2
-                    style={{
-                        fontWeight: 600,
-                        marginBottom: "60px",
-                        color: "rgb(12,50,59)",
-                    }}
-                >
-                    추가할 공지사항 정보를 입력해주세요
+                <Title2 style={{ fontWeight: 600, color: "rgb(12,50,59)" }}>
+                    아래 버튼을 클릭해서 원하는 페이지 구성을 만들어보세요!
                 </Title2>
                 <button onClick={() => formItemAdd("image")}>이미지 추가</button>
                 <button onClick={() => formItemAdd("write")}>글 추가</button>
@@ -156,64 +129,42 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                 </S.InputWrap>
                 <S.InputWrap>
                     <S.Label>썸네일 이미지</S.Label>
-                    <S.Description>
-                        사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
-                        URL을 넣어주세요.
-                    </S.Description>
+                    <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
                     <ImageUpload id="thumbnail-image" item={projectThumbnailLocalUrl} />
                 </S.InputWrap>
                 <S.InputWrap>
                     <S.Label>프로젝트 카테고리</S.Label>
-                    <S.Description>
-                        사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
-                        URL을 넣어주세요.
-                    </S.Description>
                     <S.Select onChange={(e) => setProjectCatagory(e.target.value)} value={projectCatagory}>
                         {catagoryList.map((item, i) => (
-                            <option value={item.name} key={i}>
+                            <option value={item.id} key={i}>
                                 {item.name}
                             </option>
                         ))}
                     </S.Select>
                 </S.InputWrap>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="myImage">
+                    <Droppable droppableId="myProject">
                         {(provided) => (
                             <ul {...provided.droppableProps} ref={provided.innerRef}>
                                 {formItemList.map((item, index) => (
                                     <Draggable key={"draggable" + item.order} draggableId={"draggable" + item.order} index={index}>
                                         {(provided) => (
-                                            <li
-                                                ref={provided.innerRef}
-                                                {...provided.dragHandleProps}
-                                                {...provided.draggableProps}
-                                            >
+                                            <li ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
                                                 {item.type == "image" ? (
                                                     <S.InputWrap>
                                                         <S.Label>단일 이미지</S.Label>
-                                                        <S.Description>
-                                                            사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
-                                                            URL을 넣어주세요.
-                                                        </S.Description>
+                                                        <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
                                                         <ImageUpload id={"image" + item.order} item={item} />
                                                     </S.InputWrap>
                                                 ) : item.type == "write" ? (
                                                     <S.InputWrap>
                                                         <S.Label>공지사항 내용</S.Label>
-                                                        <S.Description>
-                                                            사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
-                                                            URL을 넣어주세요.
-                                                        </S.Description>
-                                                        <WriteUpload item={item} />
+                                                        <WriteUpload defaultValue={item} />
                                                     </S.InputWrap>
-
                                                 ) : item.type == "gallery" ? (
                                                     <S.InputWrap>
                                                         <S.Label>이미지 갤러리</S.Label>
-                                                        <S.Description>
-                                                            사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
-                                                            URL을 넣어주세요.
-                                                        </S.Description>
+                                                        <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
                                                         <ImageGalleryUpload id={"imageGallery" + item.order} item={item} />
                                                     </S.InputWrap>
                                                 ) : null}
@@ -226,9 +177,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                         )}
                     </Droppable>
                 </DragDropContext>
-                <S.Button type="submit" onClick={onSubmit}>
-                    저장
-                </S.Button>
+                <S.Button type="submit" onClick={onSubmit}>저장</S.Button>
             </PageMainContentMargin>
         </PageMaxNoCSSLayout>) : <p>Loading</p>
     );
@@ -236,7 +185,6 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
 
 export const getServerSideProps: GetServerSideProps = async ({ params, }: Params) => {
     const { id } = params;
-    resetServerContext();
     const resCatagoryList = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/catagory");
     const catagoryList: ProjectCatagoryDTO[] = await resCatagoryList.json();
     const resprojectContet = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/project/${id}`);

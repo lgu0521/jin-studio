@@ -59,14 +59,13 @@ const SegmentedControl = ({ options, setValue }: Props) => {
 
 const slideDown = keyframes`
   0% {
-
-    width: 0px;
+    width: 20px;
   }
   50%{
-    width: 45px;
+    width: 200px;
   }
   100%{
-    width: 500px;
+    width: 400px;
   }
 `
 
@@ -80,9 +79,9 @@ const SegmentedUl = styled.ul`
   overflow: hidden;
   //inline-block 여백없애기
  // margin-top: -1px;
- input{
-   display:none;
- }
+  input{
+    display:none;
+  }
 `;
 
 const MainButton = styled.div<{ isClick: boolean }>`
@@ -164,7 +163,7 @@ const SegmentedMainLi = styled.li`
     :hover{
     ${SegmentedUl}{
       display:flex !important;
-      animation: linear ${slideDown} 0.2s forwards;
+      animation: linear ${slideDown} 0.1s forwards;
     };
   }
 `;
