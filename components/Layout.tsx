@@ -87,9 +87,9 @@ const Nav = styled.nav`
   width: 100%;
   @media only screen and (max-width: 767px) {
     position: fixed;
-    top: 2px;
+    top: 0px;
     background-color: white;
-    z-index: 9999;
+    z-index: 9988;
   }
   @media only screen and (min-width: 768px) {
     display: flex !important;

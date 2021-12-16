@@ -102,7 +102,7 @@ const EditLi = styled.li`
 const EditUl = styled.ul`
   display: none;
   position: absolute;
-  z-index: 9999;
+  z-index: 9988;
   right: 10px;
   text-align: left;
   white-space: nowrap;
