@@ -10,6 +10,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { ProjectCatagoryDTO } from "../../../interfaces/project-catagory.dto";
 import { Params } from "next/dist/server/router";
 import { ProjectDTO } from "../../../interfaces/project.dto";
+import { useRouter } from "next/router";
 
 type formItem = {
     order: number;
@@ -24,6 +25,7 @@ type StaticProps = {
 
 const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet }) => {
     const [winReady, setwinReady] = useState(false);
+    const router = useRouter();
     useEffect(() => { setwinReady(true); }, []);
     const [formItemList, setFormItemList] = useState<formItem[]>(projectContet.content ? projectContet.content : []);
     const [projectTitle, setProjectTitle] = useState<string>(projectContet.title);
