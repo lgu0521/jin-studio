@@ -26,7 +26,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
   const [projectTitle, setProjectTitle] = useState<string>('');
   const [projectCatagory, setProjectCatagory] = useState<string>('');
   const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<any>();
-  const router= useRouter();
+  const router = useRouter();
   // 문제 없음
   const onSubmit = async () => {
     const finalItemList: any[] = [];
@@ -53,22 +53,24 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
         }
       })
     );
-    await formItemList.map((item, index) => item.order = index);
+    const mapRes = await formItemList.map((item, index) => item.order = index);
+    if (mapRes) {
+      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/create", {
+        method: "POST",
+        body: JSON.stringify({
+          title: projectTitle,
+          catagory: projectCatagory,
+          thumbnail: newThumnail,
+          content: finalItemList,
+        }),
+      });
 
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/create", {
-      method: "POST",
-      body: JSON.stringify({
-        title: projectTitle,
-        catagory: projectCatagory,
-        thumbnail: newThumnail,
-        content: finalItemList,
-      }),
-    });
-    
-    if (res.ok) {
-      const { docId } = await res.json();
-      router.push("/project/"+docId);
+      if (res.ok) {
+        const { docId } = await res.json();
+        router.push("/project/" + docId);
+      }
     }
+
   };
 
   // 문제없음
