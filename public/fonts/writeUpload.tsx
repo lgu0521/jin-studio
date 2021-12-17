@@ -2,6 +2,7 @@ import { TuiEditorWithForwardedProps } from "../../modules/Editor";
 import { EditorProps, Editor } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
 import React, { useRef } from "react";
+import styled from "styled-components";
 type Props = {
   defaultValue: any;
 };
@@ -30,15 +31,20 @@ const WriteUpload = ({ defaultValue }: Props) => {
   };
 
   return (
-    <TuiWrapper
-      height="400px"
-      initialEditType="wysiwyg"
-      useCommandShortcut={true}
-      ref={editorRef}
-      onChange={editorRefChange}
-      initialValue={defaultValue.item ? defaultValue.item.markDownContent : ''}
-    />
+    <MarginWrap>
+      <TuiWrapper
+        height="400px"
+        initialEditType="wysiwyg"
+        useCommandShortcut={true}
+        ref={editorRef}
+        onChange={editorRefChange}
+        initialValue={defaultValue.item ? defaultValue.item.markDownContent : ''}
+      />
+    </MarginWrap>
   );
 };
 
+const MarginWrap = styled.div`
+  margin: 5px 0px;
+`
 export default WriteUpload;

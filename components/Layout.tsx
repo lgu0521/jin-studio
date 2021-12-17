@@ -5,23 +5,26 @@ import styled from "styled-components";
 import { PageMaxNoCSSLayout, Title1, Title3 } from "../styles/design-system";
 import Logo from '../public/svg/header_logo.svg';
 import Hamberger from '../public/svg/hamberger.svg';
+import { useAuth } from "../modules/AuthProvider";
+import AdminHeader from "./AdminHeader";
 
 type Props = {
   children?: ReactNode;
 };
 
 const Layout = ({ children }: Props) => {
+  const { user } = useAuth();
   const [clickBtn, setClickBtn] = useState(false);
   const sideClickRef = useRef<any>();
-  useEffect(() =>{
+  useEffect(() => {
     window.addEventListener('mousedown', handlerSideCilck);
-    return () =>{
+    return () => {
       window.removeEventListener('mousedown', handlerSideCilck);
     }
   }, []);
 
-  const handlerSideCilck = (e:MouseEvent) =>{
-    if(!sideClickRef.current.contains(e.target)){
+  const handlerSideCilck = (e: MouseEvent) => {
+    if (!sideClickRef.current.contains(e.target)) {
       setClickBtn(false);
     }
   };
@@ -34,20 +37,21 @@ const Layout = ({ children }: Props) => {
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
       <header>
+        {user ? <AdminHeader /> : null}
         <Nav ref={sideClickRef}>
           <LogoDiv>
-          <Link href="/">
-            <a>
-              <LogoWrap onClick={()=> setClickBtn(false)}>
-                <Logo />
-              </LogoWrap>
-            </a>
-          </Link>
-          <Icon isClick={clickBtn}>
-          <Hamberger onClick={()=> setClickBtn(!clickBtn)} />
-          </Icon>
+            <Link href="/">
+              <a>
+                <LogoWrap onClick={() => setClickBtn(false)}>
+                  <Logo />
+                </LogoWrap>
+              </a>
+            </Link>
+            <Icon isClick={clickBtn}>
+              <Hamberger onClick={() => setClickBtn(!clickBtn)} />
+            </Icon>
           </LogoDiv>
-          <NavUl isClick={clickBtn} onClick={()=> setClickBtn(false)}>
+          <NavUl isClick={clickBtn} onClick={() => setClickBtn(false)}>
             <NavLi>
               <Link href="/about">
                 <a>
@@ -73,8 +77,8 @@ const Layout = ({ children }: Props) => {
       {children}
       <footer>
         <FooterLayout>
-          <div style={{borderTop: "3px solid black"}}>
-          <Title3>All content copyright ZinZinstudio 2012-2021 ©</Title3>
+          <div style={{ borderTop: "3px solid black" }}>
+            <Title3>All content copyright ZinZinstudio 2012-2021 ©</Title3>
           </div>
         </FooterLayout>
       </footer>
@@ -102,16 +106,16 @@ const Nav = styled.nav`
     padding: 0px 25px;
   }
 `;
-const Icon = styled.div<{isClick: boolean}>`
+const Icon = styled.div<{ isClick: boolean }>`
   @media only screen and (min-width: 767px) {
     display: none;
   }
   transition: .3s;
-  transform:  ${(props)=> props.isClick? 'rotate(0.25turn)': 'rotate(0turn)'};;
+  transform:  ${(props) => props.isClick ? 'rotate(0.25turn)' : 'rotate(0turn)'};;
 `
-const NavUl = styled.ul<{isClick: boolean}>`
+const NavUl = styled.ul<{ isClick: boolean }>`
   @media only screen and (max-width: 767px) {
-    display: ${(props)=> props.isClick? 'block': 'none'};
+    display: ${(props) => props.isClick ? 'block' : 'none'};
   }
   @media only screen and (min-width: 768px) {
     display: flex;

@@ -172,21 +172,16 @@ input {
 .carousel .control-arrow:before,
 .carousel.carousel-slider .control-arrow:before {
   display: none !important;
-  /* margin: 0px !important;
-  display: inline-block;
-  border-top: 10px solid transparent !important;
-  border-bottom: 10px solid transparent !important;
-  content: ""; */
 }
 
-
-body{
-  padding-top: 65px;
-}
 .carousel .thumb img{
   object-fit: cover;
 }
+
 @media only screen and (max-width: 600px) {
+  body{
+    padding-top: 65px;
+  }
   .thumb {
     height: 60px !important;
   }
@@ -195,6 +190,11 @@ body{
 @media only screen and (min-width: 600px) {
   .thumb {
     height: 68px !important;
+  }
+}
+@media only screen and (max-width: 767px){
+  body{
+    padding-top: 77px;
   }
 }
 @media only screen and (min-width: 768px) {

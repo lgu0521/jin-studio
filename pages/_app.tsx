@@ -9,6 +9,8 @@ import { useEffect } from "react";
 import NProgress from 'nprogress';
 import Router from "next/router";
 import '../public/nprogress.css'
+import { AuthProvider } from "../modules/AuthProvider";
+import AuthStateChanged from "../modules/AuthStateChanged";
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   useEffect(() => {
@@ -29,14 +31,18 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       Router.events.off('routeChangeError', handleStop)
     }
   }, [Router])
-  
+
   return (
-    <ThemeProvider theme={theme}>
-      <GlobalFonts />
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
-    </ThemeProvider>
+    <AuthProvider>
+      <AuthStateChanged>
+        <ThemeProvider theme={theme}>
+          <GlobalFonts />
+          <Layout>
+            <Component {...pageProps} />
+          </Layout>
+        </ThemeProvider>
+      </AuthStateChanged>
+    </AuthProvider>
   );
 };
 

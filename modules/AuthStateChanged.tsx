@@ -2,7 +2,6 @@ import firebase from '../service/FirebaseConfig';
 import { onAuthStateChanged, getAuth } from 'firebase/auth'
 import { useAuth } from './AuthProvider';
 import { useEffect, useState } from 'react';
-import 'react-loading-skeleton/dist/skeleton.css'
 
 interface LayoutProps {
     children: React.ReactNode;

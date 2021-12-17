@@ -34,9 +34,12 @@ const ImageGalleryUpload = ({ id, defaultImages, onImageUpload }: Props) => {
   const handleOnDragEnd = (result: any) => {
     if (!result.destination) return;
     const items = [...myImage];
+    const fileItems = [...imageFileList];
     const [reorderedItem] = items.splice(result.source.index, 1);
+    const [reorderedItemFileList] = fileItems.splice(result.source.index, 1);
     items.splice(result.destination.index, 0, reorderedItem);
-    onImageUpload(items);
+    fileItems.splice(result.destination.index, 0, reorderedItemFileList);
+    onImageUpload(fileItems);
     setMyImage(items);
   };
 

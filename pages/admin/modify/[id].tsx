@@ -1,11 +1,7 @@
 import { DragDropContext, Draggable, Droppable, resetServerContext } from "react-beautiful-dnd";
 import { useState, useEffect } from "react";
 import S from "../../../styles/AdminPage.style";
-import {
-    PageMaxNoCSSLayout,
-    Title2,
-    PageMainContentMargin,
-} from "../../../styles/design-system";
+import { PageMaxNoCSSLayout, Title2, PageMainContentMargin} from "../../../styles/design-system";
 import ImageGalleryUpload from "../../../components/ImageGalleryUpload";
 import ImageUpload from "../../../components/ImageUpload";
 import WriteUpload from "../../../public/fonts/writeUpload";
@@ -51,7 +47,6 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                         break;
                     case "gallery":
                         const imageList: any[] = [];
-                        console.log(item.item);
                         await Promise.all(item.item.map(async (imageStorage: any, i: number) => {
                             if (!imageStorage.downloadUrl) {
                                 imageStorage = await GetImageStorage(imageStorage, "gallery" + i);
@@ -72,6 +67,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
             })
         );
         await formItemList.map((item, index) => item.order = index);
+
         const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/update", {
             method: "POST",
             body: JSON.stringify({
@@ -82,6 +78,11 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                 content: finalItemList,
             }),
         });
+
+        if (res.ok) {
+            const { docId } = await res.json();
+            router.push("/project/"+docId);
+          }
     };
 
     // 문제없음

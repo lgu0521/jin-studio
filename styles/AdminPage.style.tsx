@@ -145,7 +145,7 @@ const Li = styled.li`
 const InputWrap = styled.div`
   text-align: left;
   display: grid;
-  margin-top: 10px;
+  margin-top: 20px;
 `;
 
 const LabelWrap = styled.div`
@@ -194,8 +194,13 @@ const Select = styled.select`
   padding: 0px 20px;
   background-color: rgba(99, 114, 131, 0.02);
   font-size: 13px;
+  margin: 5px 0px;
 `;
-
+const EssentialSection = styled.div`
+    padding-bottom: 15px;
+    margin-bottom: 48px;
+    border-bottom: 3px solid #2c2c2c;
+`
 const Form = styled.form``;
 
 const ImageInput = styled.div`
@@ -307,8 +312,36 @@ const DeleteButton = styled.div`
   }
   cursor: pointer;
 `;
+const ButtonWrap = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+`
 
+const SelectButton = styled.div`
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  height: 40px;
+  padding: 0px 20px;
+  border-radius: 10px;
+  border: 0px;
+  color: white;
+  font-size: 14px;
+  font-weight: bold;
+  margin: 20px 10px 10px 0px;
+  background-color: rgb(12, 36, 59);
+  &:hover {
+    background-color: rgb(12, 50, 59);
+    transition: background-color 0.3s;
+    -webkit-transition: background-color 0.3s;
+  }
+  cursor: pointer;
+`
 const Style = {
+  SelectButton,
   TextArea,
   Table,
   Thead,
@@ -335,6 +368,8 @@ const Style = {
   AddButton,
   Description,
   LabelWrap,
+  EssentialSection,
+  ButtonWrap
 };
 
 export default Style;
