@@ -24,7 +24,7 @@ const AdminHeader = () => {
           </Li>
           <Li>
             <Title5>
-            <Span onClick={() => router.push("/admin/create/about")}>
+            <Span onClick={() => router.push("/admin/modify/about")}>
                 About 수정
               </Span>
             </Title5>

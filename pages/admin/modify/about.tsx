@@ -1,16 +1,15 @@
-import { DragDropContext, Draggable, Droppable, resetServerContext } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import { useState, useEffect } from "react";
 import S from "../../../styles/AdminPage.style";
-import { PageMaxNoCSSLayout, Title2, PageMainContentMargin} from "../../../styles/design-system";
+import { PageMaxNoCSSLayout, Title1, PageMainContentMargin } from "../../../styles/design-system";
 import ImageGalleryUpload from "../../../components/ImageGalleryUpload";
 import ImageUpload from "../../../components/ImageUpload";
 import WriteUpload from "../../../public/fonts/writeUpload";
 import GetImageStorage from "../../../modules/GetImageStorage";
 import { GetServerSideProps, NextPage } from "next";
-import { ProjectCatagoryDTO } from "../../../interfaces/project-catagory.dto";
 import { Params } from "next/dist/server/router";
-import { ProjectDTO } from "../../../interfaces/project.dto";
 import { useRouter } from "next/router";
+import { AboutDTO } from "../../../interfaces/about.dto";
 
 type formItem = {
     order: number;
@@ -19,25 +18,16 @@ type formItem = {
 };
 
 type StaticProps = {
-    catagoryList: ProjectCatagoryDTO[];
-    projectContet: ProjectDTO
+    AboutContent: AboutDTO
 }
 
-const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet }) => {
+const AdminModifyProject: NextPage<StaticProps> = ({ AboutContent }) => {
     const [winReady, setwinReady] = useState(false);
     const router = useRouter();
     useEffect(() => { setwinReady(true); }, []);
-    const [formItemList, setFormItemList] = useState<formItem[]>(projectContet.content ? projectContet.content : []);
-    const [projectTitle, setProjectTitle] = useState<string>(projectContet.title);
-    const [projectCatagory, setProjectCatagory] = useState<string>(projectContet.catagory);
-    const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<any>({ ...projectContet.thumbnail });
-
+    const [formItemList, setFormItemList] = useState<formItem[]>(AboutContent.content ? AboutContent.content : []);
     const onSubmit = async () => {
         const finalItemList: any[] = [];
-        var newThumnail: any;
-        if (!projectThumbnailLocalUrl.downloadUrl) {
-            newThumnail = await GetImageStorage(projectThumbnailLocalUrl, "thumbnail");
-        }
         await Promise.all(
             formItemList.map(async (item, i) => {
                 switch (item.type) {
@@ -73,18 +63,14 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
         const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/update", {
             method: "POST",
             body: JSON.stringify({
-                id: projectContet.id,
-                title: projectTitle,
-                catagory: projectCatagory,
-                thumbnail: newThumnail? newThumnail : projectThumbnailLocalUrl,
+                id: "o6Vq7IMXHY46anrHrbDm",
                 content: finalItemList,
             }),
         });
 
         if (res.ok) {
-            const { docId } = await res.json();
-            router.push("/project/"+docId);
-          }
+            router.push("/about");
+        }
     };
 
     // 문제없음
@@ -95,10 +81,10 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                 nowformItem.push({ order: nowformItem.length, type: "image", item: {} });
                 break;
             case "gallery":
-                nowformItem.push({ order: nowformItem.length, type: "gallery", item: []  });
+                nowformItem.push({ order: nowformItem.length, type: "gallery", item: [] });
                 break;
             case "write":
-                nowformItem.push({ order: nowformItem.length, type: "write", item: {}  });
+                nowformItem.push({ order: nowformItem.length, type: "write", item: {} });
                 break;
         }
         setFormItemList(nowformItem);
@@ -116,32 +102,15 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
     return (
         winReady ? (<PageMaxNoCSSLayout>
             <PageMainContentMargin>
-                <Title2 style={{ fontWeight: 600, color: "rgb(12,50,59)" }}>
-                    아래 버튼을 클릭해서 원하는 페이지 구성을 만들어보세요!
-                </Title2>
-                <button onClick={() => formItemAdd("image")}>이미지 추가</button>
-                <button onClick={() => formItemAdd("write")}>글 추가</button>
-                <button onClick={() => formItemAdd("gallery")}>갤러리 추가</button>
-                <S.InputWrap>
-                    <S.Label>공지사항 제목</S.Label>
-                    <S.Input onChange={(e) => setProjectTitle(e.target.value)} value={projectTitle} />
-                </S.InputWrap>
-                <S.InputWrap>
-                    <S.Label>썸네일 이미지</S.Label>
-                    <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
-                    <ImageUpload id="thumbnail-image" defaultImage={projectThumbnailLocalUrl.downloadUrl} onImageUpload={(file:File)=> setProjectThumbnailLocalUrl(file)}/>
-                </S.InputWrap>
-                <S.InputWrap>
-                    <S.Label>프로젝트 카테고리</S.Label>
-                    <S.Select onChange={(e) => setProjectCatagory(e.target.value)} value={projectCatagory}>
-                        {catagoryList.map((item, i) => (
-                            <option value={item.id} key={i}>
-                                {item.name}
-                            </option>
-                        ))}
-                    </S.Select>
-                </S.InputWrap>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
+                    <Title1 style={{ fontWeight: 400, color: "rgb(12,50,59)" }}>
+                        아래 버튼을 클릭해서 원하는 페이지 구성을 만들어보세요🙂
+                    </Title1>
+                    <S.ButtonWrap>
+                        <S.SelectButton onClick={() => formItemAdd("image")}>단일 이미지</S.SelectButton>
+                        <S.SelectButton onClick={() => formItemAdd("write")}>글 작성</S.SelectButton>
+                        <S.SelectButton onClick={() => formItemAdd("gallery")}>갤러리 이미지</S.SelectButton>
+                    </S.ButtonWrap>
                     <Droppable droppableId="myProject">
                         {(provided) => (
                             <ul {...provided.droppableProps} ref={provided.innerRef}>
@@ -153,7 +122,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                                                     <S.InputWrap>
                                                         <S.Label>단일 이미지</S.Label>
                                                         <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
-                                                        <ImageUpload id={"image" + item.order} defaultImage={item.item.downloadUrl? item.item.downloadUrl: null} onImageUpload={(file:File)=> item.item = file}/>
+                                                        <ImageUpload id={"image" + item.order} defaultImage={item.item.downloadUrl ? item.item.downloadUrl : null} onImageUpload={(file: File) => item.item = file} />
                                                     </S.InputWrap>
                                                 ) : item.type == "write" ? (
                                                     <S.InputWrap>
@@ -164,7 +133,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                                                     <S.InputWrap>
                                                         <S.Label>이미지 갤러리</S.Label>
                                                         <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
-                                                        <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file:FileList[])=> item.item = file}/>
+                                                        <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file: FileList[]) => item.item = file} />
                                                     </S.InputWrap>
                                                 ) : null}
                                             </li>
@@ -183,13 +152,10 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params, }: Params) => {
-    const { id } = params;
-    const resCatagoryList = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/catagory");
-    const catagoryList: ProjectCatagoryDTO[] = await resCatagoryList.json();
-    const resprojectContet = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/project/${id}`);
-    const projectContet: ProjectDTO = await resprojectContet.json();
+    const resAboutContent = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/about/update`);
+    const AboutContent: AboutDTO = await resAboutContent.json();
 
-    if (!catagoryList && !projectContet) {
+    if (!AboutContent) {
         return {
             notFound: true,
         };
@@ -197,8 +163,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params, }: Params
 
     return {
         props: {
-            catagoryList,
-            projectContet
+            AboutContent
         }
     }
 }
