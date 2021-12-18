@@ -156,7 +156,21 @@ const PageMaxNoCSSLayout = styled.div`
   max-width: 1240px;
   width: 100%;
   margin: 0 auto;
-  padding: 0px 25px;
+  @media only screen and (max-width: 600px) {
+    padding: 0px 35px;
+  }
+  @media only screen and (min-width: 600px) {
+    padding: 0px 40px;
+  }
+  @media only screen and (min-width: 768px) {
+    padding: 0px 60px;
+  }
+  @media only screen and (min-width: 992px) {
+    padding: 0px 25px;
+  }
+  @media only screen and (min-width: 1200px) {
+    padding: 0px 25px;
+  }
 `;
 
 const MarginOrPaddingLayout = styled.div`

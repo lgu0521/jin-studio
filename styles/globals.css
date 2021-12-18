@@ -169,10 +169,31 @@ input {
   border: 3px solid #d3d3d3 !important;
 }
 
+/* carousel 화살표 css */
 .carousel .control-arrow:before,
 .carousel.carousel-slider .control-arrow:before {
-  display: none !important;
+  display: block !important;
+  border: 0px solid transparent !important;
+  top: 0px;
 }
+.carousel .control-prev.control-arrow:before {
+  background-image: url('/svg/carsol-arrow.svg');
+  background-repeat: no-repeat;
+  transform: rotate(-0.5turn);
+}
+
+.carousel .control-next.control-arrow:before {
+  background-image: url('/svg/carsol-arrow.svg');
+  background-repeat: no-repeat;
+}
+
+.control-prev{
+  left: -45px !important;
+}
+.control-next{
+  right: -45px !important;
+}
+/* carousel 화살표 css end*/
 
 .carousel .thumb img{
   object-fit: cover;
@@ -185,11 +206,32 @@ input {
   .thumb {
     height: 60px !important;
   }
-
+  .carousel .control-prev.control-arrow:before,
+  .control-next.control-arrow:before {
+    height: 15px;
+    width: 100%;
+  }
+  .control-prev{
+    left: -40px !important;
+  }
+  .control-next{
+    right: -30px !important;
+  }
 }
 @media only screen and (min-width: 600px) {
   .thumb {
     height: 68px !important;
+  }
+  .carousel .control-prev.control-arrow:before,
+  .control-next.control-arrow:before {
+    height: 18px;
+    width: 100%;
+  }
+  .control-prev{
+    left: -40px !important;
+  }
+  .control-next{
+    right: -30px !important;
   }
 }
 @media only screen and (max-width: 767px){
@@ -200,6 +242,20 @@ input {
 @media only screen and (min-width: 768px) {
   .thumb {
     height: 68px !important;
+  }
+  .carousel .carousel-status {
+    font-size: 13px !important;
+  }
+  .carousel .control-prev.control-arrow:before,
+  .control-next.control-arrow:before {
+    height: 29px;
+    width: 17px;
+  }
+  .control-prev{
+    left: -40px !important;
+  }
+  .control-next{
+    right: -45px !important;
   }
 }
 @media only screen and (min-width: 992px) {
@@ -218,7 +274,6 @@ input {
   height: 100%;
 }
 
-
 .unset-image{
   position: relative !important;
   height: unset !important;
@@ -229,6 +284,7 @@ input {
   overflow: initial !important;
   margin-top: 20px !important;
 }
+
 
 .carousel .carousel-status {
   top: -20px !important;

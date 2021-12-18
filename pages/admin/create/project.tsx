@@ -53,23 +53,22 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
         }
       })
     );
-    const mapRes = await formItemList.map((item, index) => item.order = index);
-    if (mapRes) {
-      const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/create", {
-        method: "POST",
-        body: JSON.stringify({
-          title: projectTitle,
-          catagory: projectCatagory,
-          thumbnail: newThumnail,
-          content: finalItemList,
-        }),
-      });
+    await Promise.all(await formItemList.map((item, index) => item.order === index));
+    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/create", {
+      method: "POST",
+      body: JSON.stringify({
+        title: projectTitle,
+        catagory: projectCatagory,
+        thumbnail: newThumnail,
+        content: finalItemList,
+      }),
+    });
 
-      if (res.ok) {
-        const { docId } = await res.json();
-        router.push("/project/" + docId);
-      }
+    if (res.ok) {
+      const { docId } = await res.json();
+      router.push("/project/" + docId);
     }
+
 
   };
 

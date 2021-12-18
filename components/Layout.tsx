@@ -78,7 +78,7 @@ const Layout = ({ children }: Props) => {
       <footer>
         <FooterLayout>
           <div style={{ borderTop: "3px solid black" }}>
-            <Title3>All content copyright ZinZinstudio 2012-2021 ©</Title3>
+            <Title3>All content copyright ZinZinstudio ©</Title3>
           </div>
         </FooterLayout>
       </footer>

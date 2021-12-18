@@ -58,9 +58,8 @@ const AdminModifyProject: NextPage<StaticProps> = ({ AboutContent }) => {
                 }
             })
         );
-        await formItemList.map((item, index) => item.order = index);
-
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/update", {
+        await Promise.all(formItemList.map((item, index) => item.order = index));
+        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/about/update", {
             method: "POST",
             body: JSON.stringify({
                 id: "o6Vq7IMXHY46anrHrbDm",
@@ -152,7 +151,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ AboutContent }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ params, }: Params) => {
-    const resAboutContent = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/about/update`);
+    const resAboutContent = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/about/o6Vq7IMXHY46anrHrbDm`);
     const AboutContent: AboutDTO = await resAboutContent.json();
 
     if (!AboutContent) {
