@@ -7,13 +7,13 @@ import DeleteFirestore from "../modules/DeleteFirestore";
 type Props = {
   id: string;
   defaultImages: any;
-  onImageUpload: (file: FileList[]) => void;
+  onImageUpload: (file: any[]) => void;
   deleteItem:(item:any)=>void;
 };
 
 const ImageGalleryUpload = ({ id, defaultImages, onImageUpload,deleteItem }: Props) => {
   const [myImage, setMyImage] = useState<any>(defaultImages ? defaultImages : []);
-  const [imageFileList, setImageFileList] = useState<FileList[]>([]);
+  const [imageFileList, setImageFileList] = useState<any[]>(defaultImages ? defaultImages : []);
 
   const addImage = (e: any) => {
     const nowSelectImageList = e.target.files;

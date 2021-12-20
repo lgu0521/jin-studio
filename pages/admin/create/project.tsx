@@ -1,5 +1,5 @@
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import S from "../../../styles/AdminPage.style";
 import { PageMaxNoCSSLayout, Title1, PageMainContentMargin } from "../../../styles/design-system";
 import ImageGalleryUpload from "../../../components/ImageGalleryUpload";
@@ -11,6 +11,7 @@ import { ProjectCatagoryDTO } from "../../../interfaces/project-catagory.dto";
 import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useAuth } from "../../../modules/AuthProvider";
+import { Console } from "console";
 
 type formItem = {
   order: number;
@@ -23,6 +24,9 @@ type StaticProps = {
 }
 
 const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
+  const [winReady, setwinReady] = useState(false);
+  useEffect(() => { setwinReady(true); }, []);
+
   const [formItemList, setFormItemList] = useState<formItem[]>([]);
   const [projectTitle, setProjectTitle] = useState<string>('');
   const [projectCatagory, setProjectCatagory] = useState<string>('');
@@ -62,6 +66,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
       alert('프로젝트 썸네일 이미지를 넣어주세요');
       return;
     }
+    await ImplementDeleteFormDeleteContentArray();
 
     const finalItemList: any[] = [];
     const newThumnail = await GetImageStorage(projectThumbnailLocalUrl, "thumbnail");
@@ -88,6 +93,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
       })
     );
     await Promise.all(await finalItemList.map((item, index) => item.order = index));
+    console.log(finalItemList);
     const updateRes = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/create", {
       method: "POST",
       body: JSON.stringify({
@@ -133,7 +139,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
   };
 
   return (
-    user?
+    user && winReady?
     <PageMaxNoCSSLayout>
       <CustomPageMainContentMargin>
         <S.EssentialSection>
@@ -190,7 +196,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
                             <S.Label>이미지 갤러리</S.Label>
                             <S.Description>권장사이즈 : 800 x auto / 지원파일 : jpg.png (최대 2MB) </S.Description>
                             <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file: FileList[]) => item.item = file} 
-                              deleteItem={(content)=>setDeleteContentList(oldDeleteList => [...oldDeleteList, content])}
+                              deleteItem={(content)=>setDeleteContentList(oldDeleteList => [...oldDeleteList, item])}
                             />
                           </S.InputWrap>
                         ) : null}
