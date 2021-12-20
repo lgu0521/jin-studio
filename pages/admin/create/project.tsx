@@ -10,6 +10,7 @@ import { GetStaticProps, NextPage } from "next";
 import { ProjectCatagoryDTO } from "../../../interfaces/project-catagory.dto";
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import { useAuth } from "../../../modules/AuthProvider";
 
 type formItem = {
   order: number;
@@ -25,12 +26,44 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
   const [formItemList, setFormItemList] = useState<formItem[]>([]);
   const [projectTitle, setProjectTitle] = useState<string>('');
   const [projectCatagory, setProjectCatagory] = useState<string>('');
-  const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<any>();
+  const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<any>(null);
+  const [deleteContentList, setDeleteContentList] = useState<formItem[]>([]);
   const router = useRouter();
+  const {user} = useAuth();
+
+  const WillDeleteFormDeleteContentArray = (contentIndex: number, content: formItem) => {
+    const nowformItem = [...formItemList];
+    nowformItem.splice(contentIndex, 1);
+    setFormItemList(nowformItem);
+    setDeleteContentList(oldDeleteList => [...oldDeleteList, content]);
+  }
+
+  const ImplementDeleteFormDeleteContentArray = async () => {
+    var updateRes: Response;
+    await Promise.all(deleteContentList.map(async (content: formItem, i: number) => {
+      if (content.item.downloadUrl) {
+        console.log(content.item);
+        updateRes = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/delete/image", {
+          method: "POST",
+          body: JSON.stringify(content.item),
+        });
+      }
+    }));
+
+    return true;
+  }
   // 문제 없음
   const onSubmit = async () => {
+    if(projectTitle ==''){
+      alert('프로젝트 제목을 입력해주세요');
+      return;
+    }
+    if(projectThumbnailLocalUrl==null){
+      alert('프로젝트 썸네일 이미지를 넣어주세요');
+      return;
+    }
+
     const finalItemList: any[] = [];
-    //썸네일 이미지 저장
     const newThumnail = await GetImageStorage(projectThumbnailLocalUrl, "thumbnail");
     await Promise.all(
       formItemList.map(async (item, i) => {
@@ -41,6 +74,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
             break;
           case "gallery":
             const imageList: any[] = [];
+            console.log(item.item);
             await Promise.all(item.item.map(async (file: File, i: number) => {
               const imageStorage = await GetImageStorage(file, "image" + i);
               imageList.push({ ...imageStorage, order: i });
@@ -53,8 +87,8 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
         }
       })
     );
-    await Promise.all(await formItemList.map((item, index) => item.order === index));
-    const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/create", {
+    await Promise.all(await finalItemList.map((item, index) => item.order = index));
+    const updateRes = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/create", {
       method: "POST",
       body: JSON.stringify({
         title: projectTitle,
@@ -64,8 +98,8 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
       }),
     });
 
-    if (res.ok) {
-      const { docId } = await res.json();
+    if (updateRes.ok) {
+      const { docId } = await updateRes.json();
       router.push("/project/" + docId);
     }
 
@@ -99,16 +133,18 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
   };
 
   return (
+    user?
     <PageMaxNoCSSLayout>
       <CustomPageMainContentMargin>
         <S.EssentialSection>
           <S.InputWrap>
             <S.Label>프로젝트 제목</S.Label>
+            <S.Description>최대 12글자이내로 작성해주세요.(띄어쓰기 포함)</S.Description>
             <S.Input onChange={(e) => setProjectTitle(e.target.value)} value={projectTitle} />
           </S.InputWrap>
           <S.InputWrap>
             <S.Label>프로젝트 카테고리</S.Label>
-            <S.Select onChange={(e) => setProjectCatagory(e.target.value)} value={projectCatagory}>
+            <S.Select onChange={(e) => setProjectCatagory(e.target.value)} value={projectCatagory} defaultValue={CatagoryList[0].id}>
               {CatagoryList.map((item, i) => (
                 <option value={item.id} key={i}>
                   {item.name}
@@ -118,7 +154,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
           </S.InputWrap>
           <S.InputWrap>
             <S.Label>프로젝트 썸네일 이미지</S.Label>
-            <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
+            <S.Description>권장사이즈 : 300 x 300px / 지원파일 : jpg.png (최대 1MB)</S.Description>
             <ImageUpload id="thumbnail-image" defaultImage={projectThumbnailLocalUrl ? projectThumbnailLocalUrl.downloadUrl : null} onImageUpload={(file: File) => setProjectThumbnailLocalUrl(file)} />
           </S.InputWrap>
         </S.EssentialSection>
@@ -141,7 +177,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
                         {item.type == "image" ? (
                           <S.InputWrap>
                             <S.Label>단일 이미지</S.Label>
-                            <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
+                            <S.Description>권장사이즈 : 800 x auto / 지원파일 : jpg.png (최대 2MB)</S.Description>
                             <ImageUpload id={"image" + item.order} defaultImage={item.item ? item.item.downloadUrl : null} onImageUpload={(file: File) => item.item = file} />
                           </S.InputWrap>
                         ) : item.type == "write" ? (
@@ -152,8 +188,10 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
                         ) : item.type == "gallery" ? (
                           <S.InputWrap>
                             <S.Label>이미지 갤러리</S.Label>
-                            <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB) </S.Description>
-                            <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file: FileList[]) => item.item = file} />
+                            <S.Description>권장사이즈 : 800 x auto / 지원파일 : jpg.png (최대 2MB) </S.Description>
+                            <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file: FileList[]) => item.item = file} 
+                              deleteItem={(content)=>setDeleteContentList(oldDeleteList => [...oldDeleteList, content])}
+                            />
                           </S.InputWrap>
                         ) : null}
                       </li>
@@ -167,7 +205,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
         </DragDropContext>
         <S.Button type="submit" onClick={onSubmit}>저장</S.Button>
       </CustomPageMainContentMargin>
-    </PageMaxNoCSSLayout>
+    </PageMaxNoCSSLayout>: <p>404</p>
   );
 };
 

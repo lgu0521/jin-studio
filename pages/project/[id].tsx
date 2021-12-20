@@ -2,7 +2,6 @@ import { GetServerSideProps, NextPage } from "next";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Params } from "next/dist/server/router";
 import styled from "styled-components";
-import $ from "jquery";
 import {
   PageFullWidthLayout,
   PageMainContentMargin,
@@ -16,14 +15,19 @@ import dynamic from "next/dynamic";
 import { ViewerProps } from "@toast-ui/react-editor";
 import React from "react";
 import { ProjectDTO, ProjectSimpleDTO } from "../../interfaces/project.dto";
+import { useRouter } from "next/router";
+import DeleteFirestore from "../../modules/DeleteFirestore";
+import { useAuth } from "../../modules/AuthProvider";
 
 interface Props {
   projectThumnailList: ProjectSimpleDTO[],
-  projectContet: ProjectDTO
+  projectContet: ProjectDTO,
+  id: string
 }
 
-const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet }) => {
-
+const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet, id }) => {
+  const router = useRouter();
+  const { user } = useAuth();
   const TuiNoSSRWrapper = dynamic<ViewerProps>(
     () => import("../../modules/ViewEditor"),
     {
@@ -37,6 +41,10 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
   TuiWrapper.displayName = "Editor";
   return (
     <>
+      {
+        user ? <button onClick={() => router.push('/admin/modify/' + id)}>수정하기</button> : null
+      }
+      <DeleteFirestore documentId={id} cellectionName='project' />
       <BackgroundColorWithPageFullWidthLayout>
         <PageMaxNoCSSLayout>
           <PageMainContentMargin>
@@ -88,10 +96,10 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet })
       </BackgroundColorWithPageFullWidthLayout>
       <PageMaxNoCSSLayout>
         <ImageGalleryWrap>
-        <BigImageGalleryList
-          projectList={projectThumnailList}
-          selectedCatagoryId="all"
-        />
+          <BigImageGalleryList
+            projectList={projectThumnailList}
+            selectedCatagoryId="all"
+          />
         </ImageGalleryWrap>
       </PageMaxNoCSSLayout>
     </>
@@ -114,7 +122,8 @@ export const getServerSideProps: GetServerSideProps = async ({ params }: Params)
   return {
     props: {
       projectThumnailList,
-      projectContet
+      projectContet,
+      id
     },
   };
 };

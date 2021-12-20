@@ -1,7 +1,7 @@
 import { DragDropContext, Draggable, Droppable, resetServerContext } from "react-beautiful-dnd";
 import { useState, useEffect } from "react";
 import S from "../../../styles/AdminPage.style";
-import { PageMaxNoCSSLayout, Title2, PageMainContentMargin} from "../../../styles/design-system";
+import { PageMaxNoCSSLayout, Title2, PageMainContentMargin } from "../../../styles/design-system";
 import ImageGalleryUpload from "../../../components/ImageGalleryUpload";
 import ImageUpload from "../../../components/ImageUpload";
 import WriteUpload from "../../../public/fonts/writeUpload";
@@ -11,6 +11,7 @@ import { ProjectCatagoryDTO } from "../../../interfaces/project-catagory.dto";
 import { Params } from "next/dist/server/router";
 import { ProjectDTO } from "../../../interfaces/project.dto";
 import { useRouter } from "next/router";
+import { useAuth } from "../../../modules/AuthProvider";
 
 type formItem = {
     order: number;
@@ -24,6 +25,7 @@ type StaticProps = {
 }
 
 const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet }) => {
+    const { user } = useAuth();
     const [winReady, setwinReady] = useState(false);
     const router = useRouter();
     useEffect(() => { setwinReady(true); }, []);
@@ -31,8 +33,32 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
     const [projectTitle, setProjectTitle] = useState<string>(projectContet.title);
     const [projectCatagory, setProjectCatagory] = useState<string>(projectContet.catagory);
     const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<any>({ ...projectContet.thumbnail });
+    const [deleteContentList, setDeleteContentList] = useState<formItem[]>([]);
+
+    const WillDeleteFormDeleteContentArray = (contentIndex: number, content: formItem) => {
+        const nowformItem = [...formItemList];
+        nowformItem.splice(contentIndex, 1);
+        setFormItemList(nowformItem);
+        setDeleteContentList(oldDeleteList => [...oldDeleteList, content]);
+    }
+
+    const ImplementDeleteFormDeleteContentArray = async () => {
+        var updateRes: Response;
+        await Promise.all(deleteContentList.map(async (content: formItem, i: number) => {
+            if (content.item.downloadUrl) {
+                console.log(content.item);
+                updateRes = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/delete/image", {
+                    method: "POST",
+                    body: JSON.stringify(content.item),
+                });
+            }
+        }));
+
+        return true;
+    }
 
     const onSubmit = async () => {
+        await ImplementDeleteFormDeleteContentArray();
         const finalItemList: any[] = [];
         var newThumnail: any;
         if (!projectThumbnailLocalUrl.downloadUrl) {
@@ -68,23 +94,24 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                 }
             })
         );
-        await formItemList.map((item, index) => item.order = index);
+        await Promise.all(await finalItemList.map((item, index) => item.order = index));
 
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/update", {
+        const updateRes = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/update", {
             method: "POST",
             body: JSON.stringify({
                 id: projectContet.id,
                 title: projectTitle,
                 catagory: projectCatagory,
-                thumbnail: newThumnail? newThumnail : projectThumbnailLocalUrl,
+                thumbnail: newThumnail ? newThumnail : projectThumbnailLocalUrl,
                 content: finalItemList,
             }),
         });
 
-        if (res.ok) {
-            const { docId } = await res.json();
-            router.push("/project/"+docId);
-          }
+        if (updateRes.ok) {
+            const { docId } = await updateRes.json();
+            router.push("/project/" + docId);
+        }
+
     };
 
     // 문제없음
@@ -95,10 +122,10 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                 nowformItem.push({ order: nowformItem.length, type: "image", item: {} });
                 break;
             case "gallery":
-                nowformItem.push({ order: nowformItem.length, type: "gallery", item: []  });
+                nowformItem.push({ order: nowformItem.length, type: "gallery", item: [] });
                 break;
             case "write":
-                nowformItem.push({ order: nowformItem.length, type: "write", item: {}  });
+                nowformItem.push({ order: nowformItem.length, type: "write", item: {} });
                 break;
         }
         setFormItemList(nowformItem);
@@ -114,7 +141,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
     };
 
     return (
-        winReady ? (<PageMaxNoCSSLayout>
+        user && winReady ? (<PageMaxNoCSSLayout>
             <PageMainContentMargin>
                 <Title2 style={{ fontWeight: 600, color: "rgb(12,50,59)" }}>
                     아래 버튼을 클릭해서 원하는 페이지 구성을 만들어보세요!
@@ -129,7 +156,7 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                 <S.InputWrap>
                     <S.Label>썸네일 이미지</S.Label>
                     <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
-                    <ImageUpload id="thumbnail-image" defaultImage={projectThumbnailLocalUrl.downloadUrl} onImageUpload={(file:File)=> setProjectThumbnailLocalUrl(file)}/>
+                    <ImageUpload id="thumbnail-image" defaultImage={projectThumbnailLocalUrl.downloadUrl} onImageUpload={(file: File) => setProjectThumbnailLocalUrl(file)} />
                 </S.InputWrap>
                 <S.InputWrap>
                     <S.Label>프로젝트 카테고리</S.Label>
@@ -149,24 +176,27 @@ const AdminModifyProject: NextPage<StaticProps> = ({ catagoryList, projectContet
                                     <Draggable key={"draggable" + item.order} draggableId={"draggable" + item.order} index={index}>
                                         {(provided) => (
                                             <li ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-                                                {item.type == "image" ? (
-                                                    <S.InputWrap>
-                                                        <S.Label>단일 이미지</S.Label>
-                                                        <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
-                                                        <ImageUpload id={"image" + item.order} defaultImage={item.item.downloadUrl? item.item.downloadUrl: null} onImageUpload={(file:File)=> item.item = file}/>
-                                                    </S.InputWrap>
-                                                ) : item.type == "write" ? (
-                                                    <S.InputWrap>
-                                                        <S.Label>공지사항 내용</S.Label>
-                                                        <WriteUpload defaultValue={item} />
-                                                    </S.InputWrap>
-                                                ) : item.type == "gallery" ? (
-                                                    <S.InputWrap>
-                                                        <S.Label>이미지 갤러리</S.Label>
-                                                        <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
-                                                        <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file:FileList[])=> item.item = file}/>
-                                                    </S.InputWrap>
-                                                ) : null}
+                                                <S.InputWrap>
+                                                    <S.SelectButton onClick={() => WillDeleteFormDeleteContentArray(index, item)}>삭제</S.SelectButton>
+                                                    {item.type == "image" ? (
+                                                        <>
+                                                            <S.Label>단일 이미지</S.Label>
+                                                            <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
+                                                            <ImageUpload id={"image" + item.order} defaultImage={item.item.downloadUrl ? item.item.downloadUrl : null} onImageUpload={(file: File) => item.item = file} />
+                                                        </>
+                                                    ) : item.type == "write" ? (
+                                                        <>
+                                                            <S.Label>공지사항 내용</S.Label>
+                                                            <WriteUpload defaultValue={item} />
+                                                        </>
+                                                    ) : item.type == "gallery" ? (
+                                                        <>
+                                                            <S.Label>이미지 갤러리</S.Label>
+                                                            <S.Description>권장사이즈 : 800 x 400px / 지원파일 : jpg.png (최대 2MB)</S.Description>
+                                                            <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file: FileList[]) => item.item = file} />
+                                                        </>
+                                                    ) : null}
+                                                </S.InputWrap>
                                             </li>
                                         )}
                                     </Draggable>

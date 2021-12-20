@@ -11,6 +11,7 @@ import ImageUpload from "../../../components/ImageUpload";
 import WriteUpload from "../../../public/fonts/writeUpload";
 import GetImageStorage from "../../../modules/GetImageStorage";
 import { NextPage } from "next";
+import { useAuth } from "../../../modules/AuthProvider";
 
 type formItem = {
     order: number;
@@ -21,6 +22,30 @@ type formItem = {
 
 const AdminCreateNotice: NextPage = () => {
     const [formItemList, setFormItemList] = useState<formItem[]>([]);
+    const [deleteContentList, setDeleteContentList] = useState<formItem[]>([]);
+    const {user} = useAuth();
+    const WillDeleteFormDeleteContentArray = (contentIndex: number, content: formItem) => {
+        const nowformItem = [...formItemList];
+        nowformItem.splice(contentIndex, 1);
+        setFormItemList(nowformItem);
+        setDeleteContentList(oldDeleteList => [...oldDeleteList, content]);
+    }
+
+    const ImplementDeleteFormDeleteContentArray = async () => {
+        var updateRes: Response;
+        await Promise.all(deleteContentList.map(async (content: formItem, i: number) => {
+            if (content.item.downloadUrl) {
+                console.log(content.item);
+                updateRes = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/delete/image", {
+                    method: "POST",
+                    body: JSON.stringify(content.item),
+                });
+            }
+        }));
+
+        return true;
+    }
+
     const onSubmit = async () => {
         const itemList: any[] = [];
         await Promise.all(
@@ -92,6 +117,7 @@ const AdminCreateNotice: NextPage = () => {
     };
 
     return (
+        user?
         <PageMaxNoCSSLayout>
             <PageMainContentMargin>
                 <Title2
@@ -159,7 +185,7 @@ const AdminCreateNotice: NextPage = () => {
                     저장
                 </S.Button>
             </PageMainContentMargin>
-        </PageMaxNoCSSLayout>
+        </PageMaxNoCSSLayout>: <p>404</p>
     );
 };
 

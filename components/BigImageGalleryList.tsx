@@ -8,7 +8,6 @@ interface Props {
   selectedCatagoryId: string;
 }
 const BigImageGalleryList = ({ projectList, selectedCatagoryId }: Props) => {
-  console.log(projectList[0].title);
   return (
       <ImageGalleryUl>
         {projectList.map((project, i) => (

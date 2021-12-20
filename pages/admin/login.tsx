@@ -11,11 +11,12 @@ const AdminLoginPage = () => {
     const router = useRouter();
 
     const onSubmit = async (data: any) => {
-        await SignInWithEmailAndPassword(data.email, data.password).then(
-            (res: any) => {
-                router.push("/");
-            }
-        );
+        const res = await SignInWithEmailAndPassword(data.email, data.password)
+        if (res.ok) {
+            router.push("/");
+        } else {
+            alert('이메일 또는 비밀번호가 잘못 입력 되었습니다');
+        }
     };
 
     return (
