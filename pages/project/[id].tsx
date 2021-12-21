@@ -2,6 +2,7 @@ import { GetServerSideProps, NextPage } from "next";
 import "@toast-ui/editor/dist/toastui-editor-viewer.css";
 import { Params } from "next/dist/server/router";
 import styled from "styled-components";
+import S from '../../styles/AdminPage.style';
 import {
   PageFullWidthLayout,
   PageMainContentMargin,
@@ -16,8 +17,8 @@ import { ViewerProps } from "@toast-ui/react-editor";
 import React from "react";
 import { ProjectDTO, ProjectSimpleDTO } from "../../interfaces/project.dto";
 import { useRouter } from "next/router";
-import DeleteFirestore from "../../modules/DeleteFirestore";
 import { useAuth } from "../../modules/AuthProvider";
+import ErrorPage from "../../components/404Page";
 
 interface Props {
   projectThumnailList: ProjectSimpleDTO[],
@@ -32,7 +33,7 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet, i
     () => import("../../modules/ViewEditor"),
     {
       ssr: false,
-      loading: () => <p>Loading . . .</p>,
+      loading: () => <ErrorPage/>,
     }
   );
   const TuiWrapper = React.forwardRef((props: ViewerProps, ref) => (
@@ -42,9 +43,8 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet, i
   return (
     <>
       {
-        user ? <button onClick={() => router.push('/admin/modify/' + id)}>수정하기</button> : null
+        user ? <S.Button onClick={() => router.push('/admin/modify/' + id)}>수정하기</S.Button> : null
       }
-      <DeleteFirestore documentId={id} cellectionName='project' />
       <BackgroundColorWithPageFullWidthLayout>
         <PageMaxNoCSSLayout>
           <PageMainContentMargin>

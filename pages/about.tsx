@@ -12,6 +12,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { ViewerProps } from "@toast-ui/react-editor";
 import React from "react";
+import ErrorPage from "../components/404Page";
 interface Props {
   About: AboutDTO;
 }
@@ -22,7 +23,7 @@ const AboutPage: NextPage<Props> = ({ About }) => {
     () => import("../modules/ViewEditor"),
     {
       ssr: false,
-      loading: () => <p>Loading . . .</p>,
+      loading: () => <ErrorPage/>,
     }
   );
   const TuiWrapper = React.forwardRef((props: ViewerProps, ref) => (

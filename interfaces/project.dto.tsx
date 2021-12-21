@@ -19,6 +19,12 @@ export type ProjectContentItemDTO = {
   item: ImageStoreageWithOrderDTO[] | ProjectContentDTO | ImageStoreageDTO;
 };
 
+export type ProjectTmpContentDTO = {
+  type: string;
+  order: number;
+  item?: string | any[] | any;
+};
+
 export type NoticeDetailDTO = {
   id: string;
   title: string;

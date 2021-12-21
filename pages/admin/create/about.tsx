@@ -1,192 +1,95 @@
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { useState } from "react";
+//Basic
+import { useState, useEffect } from "react";
+import { GetServerSideProps, NextPage } from "next";
+import { useRouter } from "next/router";
+//Style
 import S from "../../../styles/AdminPage.style";
-import {
-    PageMaxNoCSSLayout,
-    Title2,
-    PageMainContentMargin,
-} from "../../../styles/design-system";
-import ImageGalleryUpload from "../../../components/ImageGalleryUpload";
-import ImageUpload from "../../../components/ImageUpload";
-import WriteUpload from "../../../public/fonts/writeUpload";
-import GetImageStorage from "../../../modules/GetImageStorage";
-import { NextPage } from "next";
+import { PageMaxNoCSSLayout } from "../../../styles/design-system";
+//Component
+import ProjectContentCUView from "../../../components/ProjectContentCUView";
+//Module
 import { useAuth } from "../../../modules/AuthProvider";
+import ChangeImageStorage from "../../../modules/ChangeImageStorage";
+//DTO
+import { ProjectDTO, ProjectTmpContentDTO } from "../../../interfaces/project.dto";
+import { AboutDTO } from "../../../interfaces/about.dto";
+import ErrorPage from "../../../components/404Page";
 
-type formItem = {
-    order: number;
-    type: string;
-    item?: string | any[] | any;
-};
+type GetStaticProps = {
+    aboutContet: AboutDTO
+}
 
+const AdminModifyProject: NextPage<GetStaticProps> = ({ aboutContet }) => {
+    const [winReady, setwinReady] = useState(false);
+    useEffect(() => { setwinReady(true); }, []);
 
-const AdminCreateNotice: NextPage = () => {
-    const [formItemList, setFormItemList] = useState<formItem[]>([]);
-    const [deleteContentList, setDeleteContentList] = useState<formItem[]>([]);
-    const {user} = useAuth();
-    const WillDeleteFormDeleteContentArray = (contentIndex: number, content: formItem) => {
-        const nowformItem = [...formItemList];
-        nowformItem.splice(contentIndex, 1);
-        setFormItemList(nowformItem);
-        setDeleteContentList(oldDeleteList => [...oldDeleteList, content]);
+    const [formItemList, setFormItemList] = useState<ProjectTmpContentDTO[]>(aboutContet.content ? aboutContet.content : []);
+    const deleteContentList:any[] = [];
+    
+    const router = useRouter();
+    const { user } = useAuth();
+
+    const WillDeleteFormDeleteContentArray = (content: any) => {
+        deleteContentList.push(content);
     }
 
     const ImplementDeleteFormDeleteContentArray = async () => {
-        var updateRes: Response;
-        await Promise.all(deleteContentList.map(async (content: formItem, i: number) => {
-            if (content.item.downloadUrl) {
-                console.log(content.item);
-                updateRes = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/delete/image", {
+        await Promise.all(deleteContentList.map(async (content: any, i: number) => {
+            if (content.downloadUrl) {
+                await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/delete/image", {
                     method: "POST",
-                    body: JSON.stringify(content.item),
+                    body: JSON.stringify(content),
                 });
             }
         }));
-
-        return true;
     }
 
     const onSubmit = async () => {
-        const itemList: any[] = [];
-        await Promise.all(
-            formItemList.map(async (item, i) => {
-                switch (item.type) {
-                    case "image":
-                        const imageStorage = await GetImageStorage(item.item, "image" + i);
-                        itemList.push({ ...item, item: imageStorage, });
-                        break;
-                    case "gallery":
-                        const imageList: any[] = [];
-                        await Promise.all(item.item.map(async (file: File, i: number) => {
-                            const imageStorage = await GetImageStorage(file, "image" + i);
-                            imageList.push({ ...imageStorage, order: i });
-                        }));
-                        itemList.push({ ...item, item: imageList });
-                        break;
-                    case "write":
-                        itemList.push({ ...item, item: { markDownContent: item.item }, });
-                        break;
-                }
-            })
-        );
-
-        formItemList.map((item, index) => {
-            item.order = (index as number) + 1;
-        });
-
-        const res = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/about/create", {
+        var newThumnail: any;
+        // 삭제할 이미지 검사
+        await ImplementDeleteFormDeleteContentArray();
+        //content order 정렬
+        await Promise.all(await formItemList.map((item, index) => item.order = index));
+        // 이미지 스토리지에 저장
+        const finalItemList = await ChangeImageStorage(formItemList);
+        // API 전송
+        const updateRes = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/about/update", {
             method: "POST",
             body: JSON.stringify({
-                content: itemList,
+                id: 'o6Vq7IMXHY46anrHrbDm',
+                content: finalItemList,
             }),
         });
-    };
 
-    const formItemAdd = (type: string) => {
-        const nowformItem = [...formItemList];
-        switch (type) {
-            case "image":
-                nowformItem.push({
-                    order: nowformItem.length,
-                    type: "image"
-                });
-                break;
-            case "gallery":
-                nowformItem.push({
-                    order: nowformItem.length,
-                    type: "gallery"
-                });
-                break;
-            case "write":
-                nowformItem.push({
-                    order: nowformItem.length,
-                    type: "write"
-                });
-                break;
+        if (updateRes.ok) {
+            router.push("/about");
         }
-        setFormItemList(nowformItem);
-    };
-
-    const handleOnDragEnd = (result: any) => {
-        if (!result.destination) return;
-        const nowformItem = [...formItemList];
-        const [reorderedItem] = nowformItem.splice(result.source.index, 1);
-        nowformItem.splice(result.destination.index, 0, reorderedItem);
-        console.log(nowformItem);
-        setFormItemList(nowformItem);
     };
 
     return (
-        user?
-        <PageMaxNoCSSLayout>
-            <PageMainContentMargin>
-                <Title2
-                    style={{
-                        fontWeight: 600,
-                        marginBottom: "60px",
-                        color: "rgb(12,50,59)",
-                    }}
-                >
-                    About 정보를 입력해주세요
-                </Title2>
-                <button onClick={() => formItemAdd("image")}>이미지 추가</button>
-                <button onClick={() => formItemAdd("write")}>글 추가</button>
-                <button onClick={() => formItemAdd("gallery")}>갤러리 추가</button>
-                <DragDropContext onDragEnd={handleOnDragEnd}>
-                    <Droppable droppableId="myImage">
-                        {(provided) => (
-                            <ul {...provided.droppableProps} ref={provided.innerRef}>
-                                {formItemList.map((item, index) => (
-                                    <Draggable key={"draggable" + item.order} draggableId={"draggable" + item.order} index={index}>
-                                        {(provided) => (
-                                            <li
-                                                ref={provided.innerRef}
-                                                {...provided.dragHandleProps}
-                                                {...provided.draggableProps}
-                                            >
-                                                {item.type == "image" ? (
-                                                    <S.InputWrap>
-                                                        <S.Label>단일 이미지</S.Label>
-                                                        <S.Description>
-                                                            사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
-                                                            URL을 넣어주세요.
-                                                        </S.Description>
-                                                        <ImageUpload id={"image" + item.order} defaultImage={item.item.downloadUrl? item.item.downloadUrl: null} onImageUpload={(file:File)=> item.item = file}/>
-                                                    </S.InputWrap>
-                                                ) : item.type == "write" ? (
-                                                    <S.InputWrap>
-                                                        <S.Label>공지사항 내용</S.Label>
-                                                        <S.Description>
-                                                            사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
-                                                            URL을 넣어주세요.
-                                                        </S.Description>
-                                                        <WriteUpload defaultValue={item}/>
-                                                    </S.InputWrap>
-                                                ) : item.type == "gallery" ? (
-                                                    <S.InputWrap>
-                                                        <S.Label>이미지 갤러리</S.Label>
-                                                        <S.Description>
-                                                            사진 첨부시, 반드시 FireBase에서 이미지 업로드 후
-                                                            URL을 넣어주세요.
-                                                        </S.Description>
-                                                        <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file:FileList[])=> item.item = file}/>
-                                                    </S.InputWrap>
-                                                ) : null}
-                                            </li>
-                                        )}
-                                    </Draggable>
-                                ))}
-                                {provided.placeholder}
-                            </ul>
-                        )}
-                    </Droppable>
-                </DragDropContext>
-                <S.Button type="submit" onClick={onSubmit}>
-                    저장
-                </S.Button>
-            </PageMainContentMargin>
-        </PageMaxNoCSSLayout>: <p>404</p>
+        user && winReady ?
+            <PageMaxNoCSSLayout>
+              <ProjectContentCUView projectContents={formItemList} toDeleteContent={(content) => { WillDeleteFormDeleteContentArray(content)}} onChangeProjectContents={(contents)=> setFormItemList(contents)} />
+              <S.Button type="submit" onClick={onSubmit}>저장</S.Button>
+          </PageMaxNoCSSLayout>: <ErrorPage/>
     );
 };
 
-export default AdminCreateNotice;
+export const getServerSideProps: GetServerSideProps = async () => {
+    const resprojectContet = await fetch(process.env.NEXT_PUBLIC_API_URL + `/api/about`);
+    const aboutContet: ProjectDTO = await resprojectContet.json();
+
+    if (!aboutContet) {
+        return {
+            notFound: true,
+        };
+    }
+
+    return {
+        props: {
+            aboutContet
+        }
+    }
+}
+
+export default AdminModifyProject;

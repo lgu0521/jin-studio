@@ -1,4 +1,5 @@
 import { useRouter } from "next/router";
+import S from '../styles/AdminPage.style';
 import { ImageStoreageWithOrderDTO } from "../interfaces/image-storage.dto";
 import { ProjectContentItemDTO } from "../interfaces/project.dto";
 import getUseCallProject from '../swr/getUseCallProject';
@@ -13,9 +14,14 @@ const DeleteFirestore = ({ documentId, cellectionName }: Props) => {
     if (isLoading) return <p>Loaiding</p>;
     if (isError) return <p>isError</p>;
 
+    const useConfirm = () => {
+          if (window.confirm('정말로 삭제하시겠습니까?')) {
+            implementsDelete();
+          }
+      };
+
     const ImageCheckInProjectContent = async () => {
         await Promise.all(project.content.map(async (content: ProjectContentItemDTO, i: number) => {
-            console.log(project.content);
             if (Array.isArray(content.item)) {
                 await Promise.all(content.item.map(async (galleryItem: ImageStoreageWithOrderDTO) => {
                     await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/delete/image", {
@@ -50,8 +56,7 @@ const DeleteFirestore = ({ documentId, cellectionName }: Props) => {
     }
 
     return (
-        <button onClick={() => implementsDelete()}>삭제</button>
+        <S.SelectButton onClick={() => useConfirm()}>삭제</S.SelectButton>
     );
 }
-
 export default DeleteFirestore;

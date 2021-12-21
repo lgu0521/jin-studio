@@ -8,10 +8,10 @@ type Props = {
   id: string;
   defaultImages: any;
   onImageUpload: (file: any[]) => void;
-  deleteItem:(item:any)=>void;
+  deleteItem: (item: any) => void;
 };
 
-const ImageGalleryUpload = ({ id, defaultImages, onImageUpload,deleteItem }: Props) => {
+const ImageGalleryUpload = ({ id, defaultImages, onImageUpload, deleteItem }: Props) => {
   const [myImage, setMyImage] = useState<any>(defaultImages ? defaultImages : []);
   const [imageFileList, setImageFileList] = useState<any[]>(defaultImages ? defaultImages : []);
 
@@ -22,7 +22,7 @@ const ImageGalleryUpload = ({ id, defaultImages, onImageUpload,deleteItem }: Pro
     for (let i = 0; i < nowSelectImageList.length; i += 1) {
       const nowImageUrl = {
         downloadUrl: URL.createObjectURL(nowSelectImageList[i]),
-        order: i
+        order: myImage.length + i
       };
       nowImageUrlList.push(nowImageUrl);
       nowImageFileList.push(nowSelectImageList[i]);
@@ -45,11 +45,15 @@ const ImageGalleryUpload = ({ id, defaultImages, onImageUpload,deleteItem }: Pro
     const [reorderedItemFileList] = fileItems.splice(result.source.index, 1);
     fileItems.splice(result.destination.index, 0, reorderedItemFileList);
     setImageFileList(fileItems);
-    console.log(fileItems);
     onImageUpload(fileItems);
   };
 
-  const WillDeleteFormDeleteContentArray = (contentIndex: number, content: any) => {
+  const willDeleteFormDeleteContentArray = (contentIndex: number, itemOfcontent: any) => {
+    willDeleteFormDrag(contentIndex);
+    deleteItem(itemOfcontent);
+  }
+
+  const willDeleteFormDrag = (contentIndex: number) => {
     const nowformItem = [...myImage];
     nowformItem.splice(contentIndex, 1);
     setMyImage(nowformItem);
@@ -57,8 +61,7 @@ const ImageGalleryUpload = ({ id, defaultImages, onImageUpload,deleteItem }: Pro
     const nowFileItem = [...imageFileList];
     nowFileItem.splice(contentIndex, 1);
     setImageFileList(nowFileItem);
-
-    deleteItem(content);
+    onImageUpload(nowFileItem);
   }
 
   return (
@@ -77,8 +80,10 @@ const ImageGalleryUpload = ({ id, defaultImages, onImageUpload,deleteItem }: Pro
                     <Draggable key={id + item.order} draggableId={id + item.order} index={index}>
                       {(provided) => (
                         <li ref={provided.innerRef} {...provided.dragHandleProps} {...provided.draggableProps}>
-                          <button onClick={() =>WillDeleteFormDeleteContentArray(index, item)}>삭제</button>
-                          <Image src={item.downloadUrl} height={100} width={100} />
+                          <div style={{ position: "relative" }}>
+                            <Image src={item.downloadUrl} height={100} width={100} />
+                            <DeleteButtonIcon onClick={() => willDeleteFormDeleteContentArray(index, item)} />
+                          </div>
                         </li>
                       )}
                     </Draggable>
@@ -93,6 +98,25 @@ const ImageGalleryUpload = ({ id, defaultImages, onImageUpload,deleteItem }: Pro
     </>
   );
 };
+
+const DeleteButtonIcon = styled.button`
+    position: absolute;
+    z-index: 1;
+    border-radius: 100%;
+    border: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+    background-image: url('/svg/Close.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    top: 5px;
+    left: 5px;
+    :hover{
+      background-color: red;
+    }
+`
 
 const ImageGalleryWrap = styled.div`
   width: 100%;

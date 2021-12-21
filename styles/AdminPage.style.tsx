@@ -319,7 +319,7 @@ const ButtonWrap = styled.div`
   align-items: center;
 `
 
-const SelectButton = styled.div`
+const SelectButton = styled.button`
   display: flex;
   justify-content: center;
   text-align: center;
@@ -339,6 +339,25 @@ const SelectButton = styled.div`
     -webkit-transition: background-color 0.3s;
   }
   cursor: pointer;
+`
+
+const DeleteButtonIcon = styled.button`
+    position: absolute;
+    z-index: 1;
+    border-radius: 100%;
+    border: 0px;
+    width: 20px;
+    height: 20px;
+    background-color: black;
+    background-image: url('/svg/Close.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+    top: 5px;
+    right: 5px;
+    :hover{
+      background-color: red;
+    }
 `
 const Style = {
   SelectButton,
@@ -369,7 +388,8 @@ const Style = {
   Description,
   LabelWrap,
   EssentialSection,
-  ButtonWrap
+  ButtonWrap,
+  DeleteButtonIcon
 };
 
 export default Style;

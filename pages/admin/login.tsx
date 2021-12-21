@@ -11,8 +11,9 @@ const AdminLoginPage = () => {
     const router = useRouter();
 
     const onSubmit = async (data: any) => {
-        const res = await SignInWithEmailAndPassword(data.email, data.password)
-        if (res.ok) {
+        await SignInWithEmailAndPassword(data.email, data.password);
+        console.log(user);
+        if (user) {
             router.push("/");
         } else {
             alert('이메일 또는 비밀번호가 잘못 입력 되었습니다');

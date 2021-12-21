@@ -3,6 +3,7 @@ import { EditorProps, Editor } from "@toast-ui/react-editor";
 import dynamic from "next/dynamic";
 import React, { useRef } from "react";
 import styled from "styled-components";
+import ErrorPage from "../../components/404Page";
 type Props = {
   defaultValue: any;
 };
@@ -10,7 +11,7 @@ const TuiNoSSRWrapper = dynamic<TuiEditorWithForwardedProps>(
   () => import("../../modules/Editor"),
   {
     ssr: false,
-    loading: () => <p>Loading . . .</p>,
+    loading: () => <ErrorPage/>,
   }
 );
 const TuiWrapper = React.forwardRef((props: EditorProps, ref) => (

@@ -2,6 +2,7 @@ import firebase from '../service/FirebaseConfig';
 import { onAuthStateChanged, getAuth } from 'firebase/auth'
 import { useAuth } from './AuthProvider';
 import { useEffect, useState } from 'react';
+import ErrorPage from '../components/404Page';
 
 interface LayoutProps {
     children: React.ReactNode;
@@ -20,7 +21,7 @@ const AuthStateChanged = ({ children }: LayoutProps) => {
     }, []);
 
     if (loading) {
-        return <p>Loading...</p>
+        return <ErrorPage/>
     }
 
     return (
