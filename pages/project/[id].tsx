@@ -18,7 +18,7 @@ import React from "react";
 import { ProjectDTO, ProjectSimpleDTO } from "../../interfaces/project.dto";
 import { useRouter } from "next/router";
 import { useAuth } from "../../modules/AuthProvider";
-import ErrorPage from "../../components/404Page";
+import Boomerang from "../../components/Boomerang";
 
 interface Props {
   projectThumnailList: ProjectSimpleDTO[],
@@ -33,7 +33,7 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet, i
     () => import("../../modules/ViewEditor"),
     {
       ssr: false,
-      loading: () => <ErrorPage/>,
+      loading: () => <Boomerang/>,
     }
   );
   const TuiWrapper = React.forwardRef((props: ViewerProps, ref) => (
