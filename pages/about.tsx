@@ -1,5 +1,5 @@
 //Basic
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import styled from "styled-components";
 import { AboutDTO } from '../interfaces/about.dto';
 //Component
@@ -82,7 +82,7 @@ const AboutPage: NextPage<Props> = ({ About }) => {
   )
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const resAbout = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/about/o6Vq7IMXHY46anrHrbDm");
   const About: AboutDTO = await resAbout.json();
 
