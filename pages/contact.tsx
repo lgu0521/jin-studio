@@ -7,7 +7,7 @@ import {
   PageMainContentMargin,
   Title1,
 } from "../styles/design-system";
-
+import Custom404 from "../components/404";
 interface Props {}
 
 const ContactPage: NextPage<Props> = ({}) => {
@@ -16,7 +16,7 @@ const ContactPage: NextPage<Props> = ({}) => {
   return (
     <PageMaxNoCSSLayout>
       <PageMainContentMargin>
-        <Title1>준비중 입니다</Title1>
+        <Custom404/>
       </PageMainContentMargin>
     </PageMaxNoCSSLayout>
   );
