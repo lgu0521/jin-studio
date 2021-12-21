@@ -34,6 +34,7 @@ export const AuthProvider = (props: { children: React.ReactNode }) => {
         const { error, user } = await AuthService.SignInWithEmailAndPassword(email, password);
         setUser(user ?? undefined);
         setError(error ?? "");
+        return user;
     }
 
     const LoginOut = async () => {
