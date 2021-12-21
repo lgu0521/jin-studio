@@ -2,40 +2,43 @@ import { ProjectSimpleDTO } from "../interfaces/project.dto";
 import Image from "next/image";
 import Link from "next/link";
 import styled from "styled-components";
+import getThumNailImage from "../swr/getThumNailImage";
+import Boomerang from "./Boomerang";
 
 interface Props {
-  projectList: ProjectSimpleDTO[];
   selectedCatagoryId: string;
 }
-const BigImageGalleryList = ({ projectList, selectedCatagoryId }: Props) => {
-  console.log(selectedCatagoryId);
+const BigImageGalleryList = ({ selectedCatagoryId }: Props) => {
+  const { thumNailImages, isLoading, isError } = getThumNailImage();
+  if(isLoading){return <Boomerang/>};
+  if(isError){return <Boomerang/>};
   return (
-      <ImageGalleryUl>
-        {projectList.map((project, i) => (
-          <ImageGalleryli
-            key={i}
-            selectedCatagory={selectedCatagoryId}
-            projectCatagory={project.catagory}
-          >
-            <Link href={"/project/" + project.id}>
-              <a>
-                <AnimationImageWrap projectTitle={project.title}>
-                  <Image
-                    layout="responsive"
-                    src={project.thumbnail.downloadUrl}
-                    objectFit="cover"
-                    alt=""
-                    width={100}
-                    height={100}
-                    placeholder="blur"
-                    blurDataURL="/image/blur.png"
-                  />
-                </AnimationImageWrap>
-              </a>
-            </Link>
-          </ImageGalleryli>
-        ))}
-      </ImageGalleryUl>
+    <ImageGalleryUl>
+      {thumNailImages.map((project:ProjectSimpleDTO, i:number) => (
+        <ImageGalleryli
+          key={i}
+          selectedCatagory={selectedCatagoryId}
+          projectCatagory={project.catagory}
+        >
+          <Link href={"/project/" + project.id}>
+            <a>
+              <AnimationImageWrap projectTitle={project.title}>
+                <Image
+                  layout="responsive"
+                  src={project.thumbnail.downloadUrl}
+                  objectFit="cover"
+                  alt=""
+                  width={100}
+                  height={100}
+                  placeholder="blur"
+                  blurDataURL="/image/blur.png"
+                />
+              </AnimationImageWrap>
+            </a>
+          </Link>
+        </ImageGalleryli>
+      ))}
+    </ImageGalleryUl>
   );
 };
 
@@ -77,12 +80,12 @@ const ImageGalleryli = styled.li<{ selectedCatagory: string; projectCatagory: st
 `;
 
 
-const AnimationImageWrap = styled.div<{projectTitle: string}>`
+const AnimationImageWrap = styled.div<{ projectTitle: string }>`
   position: relative;
   cursor: pointer;
   overflow: hidden;
     :before{
-      content: '${(props) => props.projectTitle? props.projectTitle : '제목 없음'}';
+      content: '${(props) => props.projectTitle ? props.projectTitle : '제목 없음'}';
       position: absolute;
       width: 100%;
       z-index: 1;

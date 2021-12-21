@@ -97,7 +97,6 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet, i
       <PageMaxNoCSSLayout>
         <ImageGalleryWrap>
           <BigImageGalleryList
-            projectList={projectThumnailList}
             selectedCatagoryId="all"
           />
         </ImageGalleryWrap>

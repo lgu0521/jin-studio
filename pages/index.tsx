@@ -27,7 +27,6 @@ const IndexPage: NextPage<Props> = ({ projectThumnailList, CatagoryList }) => {
       </Compontent1Wrap>
       <ImageGalleryWrap>
         <BigImageGalleryList
-          projectList={projectThumnailList}
           selectedCatagoryId={currentCatagoryId}
         />
         </ImageGalleryWrap>
