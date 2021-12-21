@@ -15,7 +15,7 @@ import ChangeImageStorage from "../../../modules/ChangeImageStorage";
 //DTO
 import { ProjectCatagoryDTO } from "../../../interfaces/project-catagory.dto";
 import { ProjectTmpContentDTO } from "../../../interfaces/project.dto";
-import ErrorPage from "../../../components/404Page";
+import Custom404 from "../../../components/404";
 
 type StaticProps = {
   CatagoryList: ProjectCatagoryDTO[]
@@ -113,7 +113,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
         </S.EssentialSection>
         <ProjectContentCUView projectContents={formItemList} toDeleteContent={(content) => { WillDeleteFormDeleteContentArray(content) }} onChangeProjectContents={(contents) => setFormItemList(contents)} />
         <S.Button type="submit" onClick={onSubmit}>저장</S.Button>
-      </PageMaxNoCSSLayout> : <ErrorPage/>
+      </PageMaxNoCSSLayout> : <Custom404/>
   );
 };
 

@@ -5,6 +5,7 @@ import { useState } from "react";
 import {
   PageMaxNoCSSLayout,
   PageMainContentMargin,
+  Title1,
 } from "../styles/design-system";
 
 interface Props {}
@@ -15,7 +16,7 @@ const ContactPage: NextPage<Props> = ({}) => {
   return (
     <PageMaxNoCSSLayout>
       <PageMainContentMargin>
-        <p>Contact 페이지 입니다</p>
+        <Title1>준비중 입니다</Title1>
       </PageMainContentMargin>
     </PageMaxNoCSSLayout>
   );

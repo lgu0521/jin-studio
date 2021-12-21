@@ -13,7 +13,7 @@ import ChangeImageStorage from "../../../modules/ChangeImageStorage";
 //DTO
 import { ProjectDTO, ProjectTmpContentDTO } from "../../../interfaces/project.dto";
 import { AboutDTO } from "../../../interfaces/about.dto";
-import ErrorPage from "../../../components/404Page";
+import Custom404 from "../../../components/404";
 
 type GetStaticProps = {
     aboutContet: AboutDTO
@@ -71,7 +71,7 @@ const AdminModifyProject: NextPage<GetStaticProps> = ({ aboutContet }) => {
             <PageMaxNoCSSLayout>
               <ProjectContentCUView projectContents={formItemList} toDeleteContent={(content) => { WillDeleteFormDeleteContentArray(content)}} onChangeProjectContents={(contents)=> setFormItemList(contents)} />
               <S.Button type="submit" onClick={onSubmit}>저장</S.Button>
-          </PageMaxNoCSSLayout>: <ErrorPage/>
+          </PageMaxNoCSSLayout>: <Custom404/>
     );
 };
 

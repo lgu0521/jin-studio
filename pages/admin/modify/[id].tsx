@@ -17,7 +17,7 @@ import ChangeImageStorage from "../../../modules/ChangeImageStorage";
 import { ProjectCatagoryDTO } from "../../../interfaces/project-catagory.dto";
 import { ProjectDTO, ProjectTmpContentDTO } from "../../../interfaces/project.dto";
 import DeleteFirestore from "../../../modules/DeleteFirestore";
-import ErrorPage from "../../../components/404Page";
+import Custom404 from "../../../components/404";
 
 type GetStaticProps = {
     catagoryList: ProjectCatagoryDTO[];
@@ -119,7 +119,7 @@ const AdminModifyProject: NextPage<GetStaticProps> = ({ catagoryList, projectCon
                     <DeleteFirestore documentId={projectContet.id} cellectionName='project' />
                     <S.SelectButton type="submit" onClick={onSubmit}>저장</S.SelectButton>
                 </S.ButtonWrap>
-            </PageMaxNoCSSLayout> :<ErrorPage/>
+            </PageMaxNoCSSLayout> :<Custom404/>
     );
 };
 
