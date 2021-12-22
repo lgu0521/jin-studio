@@ -35,12 +35,10 @@ const Layout = ({ children }: Props) => {
         <title>studiozinzin</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-{/* 
-        <meta property="og:url" content="https://code-study.tistory.com/"/>
-    <meta property="og:title" content="studiozinzin"/>
-    <meta property="og:type" content="website"/>
-    <meta property="og:image" content="https://code-study.tistory.com/images/img_share.png"/>
-    <meta property="og:description" content="공유기능 | 열심히 코드를 공부합시다."/> */}
+        <meta property="og:title" content="Studio Zinzin" />
+        <meta property="og:type" content="website" />
+        <meta property="og:image" content="https://www.studiozinzin.com/image/ThumnailImage.jpeg" />
+        <meta property="og:description" content="Hyunjin Jung_Zinzin's artworks" />
       </Head>
       <header>
         {user ? <AdminHeader /> : null}

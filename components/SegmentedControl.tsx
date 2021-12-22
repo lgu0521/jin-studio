@@ -24,7 +24,6 @@ const SegmentedControl = ({ options, setValue }: Props) => {
     if (!outSideClickRef.current.contains(e.target)) {
       setIsOutSideClick(false);
     }
-    console.log(stateValue);
   }
   const getUserClickCatagory = (catagoryIndex: number, catagoryId: string) =>{
     if(stateValue== catagoryIndex){
