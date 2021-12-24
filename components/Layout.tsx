@@ -35,10 +35,14 @@ const Layout = ({ children }: Props) => {
         <title>studiozinzin</title>
         <meta charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta property="og:title" content="Studio Zinzin" />
-        <meta property="og:type" content="website" />
+        <meta property="og:type" content="website" /> 
+        <meta property="og:title" content="Studio Zinzin" /> 
+        <meta property="og:site_name" content="Studio Zinzin" /> 
+        <meta property="og:url" content="https://www.studiozinzin.com" /> 
         <meta property="og:image" content="https://www.studiozinzin.com/image/ThumnailImage.jpeg" />
-        <meta property="og:description" content="Hyunjin Jung_Zinzin's artworks" />
+        <meta property="og:image:width" content="800" />
+        <meta property="og:image:height" content="400" />
+        <meta property="og:description" content="Hyunjin Jung_Zinzin's artworks" key="description"/>
       </Head>
       <header>
         {user ? <AdminHeader /> : null}
