@@ -1,6 +1,5 @@
 import React, { ReactNode, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import Head from "next/head";
 import styled from "styled-components";
 import { PageMaxNoCSSLayout, Title1, Title3 } from "../styles/design-system";
 import Logo from '../public/svg/header_logo.svg';
@@ -31,19 +30,6 @@ const Layout = ({ children }: Props) => {
 
   return (
     <div>
-      <Head>
-        <title>studiozinzin</title>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-        <meta property="og:type" content="website" /> 
-        <meta property="og:title" content="Studio Zinzin" /> 
-        <meta property="og:site_name" content="Studio Zinzin" /> 
-        <meta property="og:url" content="https://www.studiozinzin.com" /> 
-        <meta property="og:image" content="https://www.studiozinzin.com/image/ThumnailImage.jpeg" />
-        <meta property="og:image:width" content="800" />
-        <meta property="og:image:height" content="400" />
-        <meta name="description" content="Hyunjin Jung_Zinzin's artworks" key="description"/>
-      </Head>
       <header>
         {user ? <AdminHeader /> : null}
         <Nav ref={sideClickRef}>
