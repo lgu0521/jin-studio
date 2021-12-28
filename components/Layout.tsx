@@ -42,7 +42,7 @@ const Layout = ({ children }: Props) => {
         <meta property="og:image" content="https://www.studiozinzin.com/image/ThumnailImage.jpeg" />
         <meta property="og:image:width" content="800" />
         <meta property="og:image:height" content="400" />
-        <meta property="og:description" content="Hyunjin Jung_Zinzin's artworks" key="description"/>
+        <meta name="description" content="Hyunjin Jung_Zinzin's artworks" key="description"/>
       </Head>
       <header>
         {user ? <AdminHeader /> : null}

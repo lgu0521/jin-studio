@@ -1,6 +1,7 @@
 //Basic
 import { GetStaticProps, NextPage } from "next";
 import { useState } from "react";
+import Head from 'next/head';
 //Component
 import {
   PageMaxNoCSSLayout,
@@ -14,11 +15,17 @@ const ContactPage: NextPage<Props> = ({}) => {
   const [currentCatagoryId, setUserCatagoryId] = useState<string>("0");
 
   return (
+    <>
+     <Head>
+        <title>contact</title>
+        <meta property="og:title" content="contact" /> 
+      </Head>
     <PageMaxNoCSSLayout>
       <PageMainContentMargin>
         <Custom404/>
       </PageMainContentMargin>
     </PageMaxNoCSSLayout>
+    </>
   );
 };
 
