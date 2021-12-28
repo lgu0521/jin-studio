@@ -19,7 +19,7 @@ class MyDocument extends Document {
                     <meta property="og:image" content="https://www.studiozinzin.com/image/ThumnailImage.jpeg" />
                     <meta property="og:image:width" content="800" />
                     <meta property="og:image:height" content="400" />
-                    <meta name="description" content="Hyunjin Jung_Zinzin's artworks" key="description" />
+                    <meta property="og:description" content="Hyunjin Jung_Zinzin's artworks" key="description" />
                 </Head>
                 <body>
                     <Main />
