@@ -2,6 +2,7 @@
 import { GetServerSideProps, GetStaticProps, NextPage } from "next";
 import styled from "styled-components";
 import { AboutDTO } from '../interfaces/about.dto';
+import Head from 'next/head';
 //Component
 import {
   PageMaxNoCSSLayout,
@@ -23,7 +24,7 @@ const AboutPage: NextPage<Props> = ({ About }) => {
     () => import("../modules/ViewEditor"),
     {
       ssr: false,
-      loading: () => <Boomerang/>,
+      loading: () => <Boomerang />,
     }
   );
   const TuiWrapper = React.forwardRef((props: ViewerProps, ref) => (
@@ -32,6 +33,9 @@ const AboutPage: NextPage<Props> = ({ About }) => {
   TuiWrapper.displayName = "Editor";
   return (
     <>
+      <Head>
+        <title>about - Studio Zinzin</title>
+      </Head>
       <PageMaxNoCSSLayout>
         <PageMainContentMargin>
           <ContentSection className="rkdms">

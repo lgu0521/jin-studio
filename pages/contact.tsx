@@ -4,27 +4,23 @@ import { useState } from "react";
 import Head from 'next/head';
 //Component
 import {
-  PageMaxNoCSSLayout,
-  PageMainContentMargin,
-  Title1,
-} from "../styles/design-system";
+  PageMaxNoCSSLayout, PageMainContentMargin} from "../styles/design-system";
 import Custom404 from "../components/404";
-interface Props {}
+interface Props { }
 
-const ContactPage: NextPage<Props> = ({}) => {
+const ContactPage: NextPage<Props> = ({ }) => {
   const [currentCatagoryId, setUserCatagoryId] = useState<string>("0");
 
   return (
     <>
-     <Head>
-        <title>contact</title>
-        <meta property="og:title" content="contact" /> 
+      <Head>
+        <title>contant - Studio Zinzin</title>
       </Head>
-    <PageMaxNoCSSLayout>
-      <PageMainContentMargin>
-        <Custom404/>
-      </PageMainContentMargin>
-    </PageMaxNoCSSLayout>
+      <PageMaxNoCSSLayout>
+        <PageMainContentMargin>
+          <Custom404 />
+        </PageMainContentMargin>
+      </PageMaxNoCSSLayout>
     </>
   );
 };

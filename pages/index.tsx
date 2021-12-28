@@ -1,6 +1,7 @@
 //Basic
 import { GetStaticProps, NextPage } from "next";
 import { useState } from "react";
+import Head from 'next/head';
 //Component
 import BigImageGalleryList from "../components/BigImageGalleryList";
 import { PageMaxNoCSSLayout, PageMainContentMargin } from "../styles/design-system";
@@ -8,6 +9,7 @@ import SegmentedControl from "../components/SegmentedControl";
 import { ProjectSimpleDTO } from "../interfaces/project.dto";
 import { ProjectCatagoryDTO } from "../interfaces/project-catagory.dto";
 import styled from "styled-components";
+
 
 interface Props {
   projectThumnailList: ProjectSimpleDTO[];
@@ -18,6 +20,10 @@ const IndexPage: NextPage<Props> = ({ projectThumnailList, CatagoryList }) => {
   const [currentCatagoryId, setUserCatagoryId] = useState<string>("all");
 
   return (
+    <>
+    <Head>
+      <title>Studio Zinzin</title>
+    </Head>
     <MainPageMaxNoCSSLayout>
       <Compontent1Wrap>
         <SegmentedControl
@@ -31,6 +37,7 @@ const IndexPage: NextPage<Props> = ({ projectThumnailList, CatagoryList }) => {
         />
         </ImageGalleryWrap>
     </MainPageMaxNoCSSLayout>
+    </>
   );
 };
 
