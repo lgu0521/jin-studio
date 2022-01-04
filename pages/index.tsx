@@ -35,7 +35,7 @@ const IndexPage: NextPage<Props> = ({ projectThumnailList, CatagoryList }) => {
         <BigImageGalleryList
           selectedCatagoryId={currentCatagoryId}
         />
-        </ImageGalleryWrap>
+      </ImageGalleryWrap>
     </MainPageMaxNoCSSLayout>
     </>
   );
