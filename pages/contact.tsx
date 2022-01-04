@@ -17,15 +17,17 @@ const ContactPage: NextPage = () => {
       </Head>
       <PageMaxNoCSSLayout>
         <CustomPageMainContentMargin>
-        <ImageWrap>
+          <ImageWrap>
             <Image src={gitImage} height={200} width={200} layout='responsive' />
           </ImageWrap>
           <ContactList>
             <Contact>
-              <MediaImageWrap>
-                <Image src="/svg/gmail.svg" width={75} height={75} objectFit='contain' layout='responsive' />
-              </MediaImageWrap>
-              <Typography>heyjin429@gmail.com</Typography>
+              <a href="mailto:heyjin429@gmail.com" target="_blank" rel="noreferrer">
+                <MediaImageWrap>
+                  <Image src="/svg/gmail.svg" width={75} height={75} objectFit='contain' layout='responsive' />
+                </MediaImageWrap>
+                <Typography>heyjin429@gmail.com</Typography>
+              </a>
             </Contact>
             <Contact>
               <a href="https://www.youtube.com/channel/UCOzsnzYzy2zsL5sofpFL35A" target="_blank" rel="noreferrer">
@@ -96,6 +98,7 @@ const CustomPageMainContentMargin = styled(PageMainContentMargin)`
     gap: 0px;
     flex-direction: column-reverse;
     align-content: center;
+    height: 80vh;
   }
   @media only screen and (min-width: 768px) {
     gap: 0px;
@@ -155,12 +158,12 @@ const Contact = styled.li`
 const ImageWrap = styled.div`
   align-self: flex-end;
   @media only screen and (max-width: 600px) {
-    width: 200px;
-    align-self: center;
+    width: 180px;
+    align-self: flex-start;
   }
   @media only screen and (min-width: 600px) and (max-width: 767px) {
     width: 250px;
-    align-self: center;
+    align-self: flex-start;
   }
   @media only screen and (min-width: 768px) {
     width: 300px;
