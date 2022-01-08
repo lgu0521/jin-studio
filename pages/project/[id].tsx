@@ -70,9 +70,9 @@ const ProjectContent: NextPage<Props> = ({ projectThumnailList, projectContet, i
                         // selectedItem={1}
                         >
                           {item.item.map((image: any, i: number) => (
-                            <div key={i}>
+                            <GallerayImage key={i}>
                               <img src={image.downloadUrl} alt="" />
-                            </div>
+                            </GallerayImage>
                           ))}
                         </Carousel>
                       </GalleryWrap>
@@ -208,4 +208,27 @@ const GalleryWrap = styled.div`
   width: 100%;
   object-fit: contain;
 `;
+
+const GallerayImage = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    align-content: center;
+    width: 100%;
+  @media only screen and (max-width: 600px) {
+    height: 210px;
+  }
+  @media only screen and (min-width: 600px) {
+    height: 300px;
+  }
+  @media only screen and (min-width: 700px) {
+    height: 350px;
+  }
+  @media only screen and (min-width: 800px) {
+    height: 400px;
+  }
+  @media only screen and (min-width: 992px) {
+    height: 450px;
+  }
+`
 export default ProjectContent;

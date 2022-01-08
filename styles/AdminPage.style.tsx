@@ -186,6 +186,9 @@ const Input = styled.input`
   font-size: 13px;
 `;
 
+const CalendarWrap = styled.div`
+  margin: 5px 0px;
+`
 const Select = styled.select`
   width: 100%;
   height: 50px;
@@ -389,7 +392,8 @@ const Style = {
   LabelWrap,
   EssentialSection,
   ButtonWrap,
-  DeleteButtonIcon
+  DeleteButtonIcon,
+  CalendarWrap
 };
 
 export default Style;

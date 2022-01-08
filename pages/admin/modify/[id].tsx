@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 //Style
 import S from "../../../styles/AdminPage.style";
 import { PageMaxNoCSSLayout } from "../../../styles/design-system";
+import "react-datepicker/dist/react-datepicker.css";
 //Component
 import ImageUpload from "../../../components/ImageUpload";
 import ProjectContentCUView from "../../../components/ProjectContentCUView";
@@ -13,6 +14,8 @@ import ProjectContentCUView from "../../../components/ProjectContentCUView";
 import { useAuth } from "../../../modules/AuthProvider";
 import GetImageStorage from "../../../modules/GetImageStorage";
 import ChangeImageStorage from "../../../modules/ChangeImageStorage";
+import DatePicker from 'react-datepicker';
+
 //DTO
 import { ProjectCatagoryDTO } from "../../../interfaces/project-catagory.dto";
 import { ProjectDTO, ProjectTmpContentDTO } from "../../../interfaces/project.dto";
@@ -31,10 +34,10 @@ const AdminModifyProject: NextPage<GetStaticProps> = ({ catagoryList, projectCon
     const [formItemList, setFormItemList] = useState<ProjectTmpContentDTO[]>(projectContet.content ? projectContet.content : []);
     const [projectTitle, setProjectTitle] = useState<string>(projectContet.title ? projectContet.title : '');
     const [projectCatagory, setProjectCatagory] = useState<string>(projectContet.catagory ? projectContet.catagory : '');
+    const [projectCreateDate, setProjectCreateDate] = useState<any>(projectContet.datetime ? new Date(projectContet.datetime) : new Date());
     const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<any>(projectContet.thumbnail ? { ...projectContet.thumbnail } : null);
-
     const deleteContentList: any[] = [];
-
+    console.log(projectContet.datetime);
     const router = useRouter();
     const { user } = useAuth();
 
@@ -80,6 +83,7 @@ const AdminModifyProject: NextPage<GetStaticProps> = ({ catagoryList, projectCon
                 catagory: projectCatagory,
                 thumbnail: newThumnail ? newThumnail : projectThumbnailLocalUrl,
                 content: finalItemList,
+                datetime: projectCreateDate
             }),
         });
 
@@ -110,8 +114,20 @@ const AdminModifyProject: NextPage<GetStaticProps> = ({ catagoryList, projectCon
                     </S.InputWrap>
                     <S.InputWrap>
                         <S.Label>프로젝트 썸네일 이미지</S.Label>
-                        <S.Description>권장사이즈 : 300 x 300px / 지원파일 : jpg.png (최대 1MB)</S.Description>
+                        <S.Description>권장사이즈 : 300 x 300px / 지원파일 : jpg,png (최대 1MB)</S.Description>
                         <ImageUpload id="thumbnail-image" defaultImage={projectThumbnailLocalUrl ? projectThumbnailLocalUrl.downloadUrl : null} onImageUpload={(file: File) => setProjectThumbnailLocalUrl(file)} />
+                    </S.InputWrap>
+                    <S.InputWrap>
+                        <S.Label>프로젝트 생성 날짜</S.Label>
+                        <S.Description>프로젝트 생성 날짜를 설정해주세요</S.Description>
+                        <S.CalendarWrap>
+                        <DatePicker
+                            selected={projectCreateDate}
+                            onChange={setProjectCreateDate}
+                            showTimeInput
+                            dateFormat="Pp"
+                        />
+                        </S.CalendarWrap>
                     </S.InputWrap>
                 </S.EssentialSection>
                 <ProjectContentCUView projectContents={formItemList} toDeleteContent={(content) => { WillDeleteFormDeleteContentArray(content) }} onChangeProjectContents={(contents) => setFormItemList(contents)} />

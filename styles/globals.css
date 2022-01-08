@@ -270,8 +270,9 @@ input {
 }
 
 .carousel img {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain !important;
 }
 
 .unset-image{
@@ -285,9 +286,15 @@ input {
   margin-top: 20px !important;
 }
 
-
+.carousel .slider-wrapper.axis-horizontal .slider .slide {
+  overflow: hidden;
+}
 .carousel .carousel-status {
   top: -20px !important;
   text-shadow: 0 0 black !important;
   color: #999 !important;
+}
+
+.react-datepicker__month-container{
+  float: none !important;
 }

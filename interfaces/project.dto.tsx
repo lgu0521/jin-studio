@@ -3,7 +3,7 @@ import { ProjectContentDTO } from "./project-content.dto";
 
 export interface ProjectDTO extends ProjectSimpleDTO {
   content: ProjectContentItemDTO[];
-  datetime: string;
+  datetime: any;
 }
 
 export type ProjectSimpleDTO = {
@@ -29,6 +29,6 @@ export type NoticeDetailDTO = {
   id: string;
   title: string;
   content: string;
-  datetime: string;
+  datetime: any;
   isNotice: boolean;
 };

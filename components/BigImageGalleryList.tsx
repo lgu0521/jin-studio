@@ -97,6 +97,7 @@ const AnimationImageWrap = styled.div<{ projectTitle: string }>`
       transition: .1s;
       transition-property: .2s;
       margin-top: -200px;
+      line-height: 1.3;
       opacity: 0;
       @media only screen and (max-width: 310px) {
         font-size: ${(props) => props.theme.fontSizes.title7};
@@ -108,13 +109,13 @@ const AnimationImageWrap = styled.div<{ projectTitle: string }>`
         font-size: ${(props) => props.theme.fontSizes.title5};
       }
       @media only screen and (min-width: 768px) {
-        font-size: ${(props) => props.theme.fontSizes.title4};
+        font-size: ${(props) => props.theme.fontSizes.title5};
       }
       @media only screen and (min-width: 992px) {
-        font-size: ${(props) => props.theme.fontSizes.title3};
+        font-size: ${(props) => props.theme.fontSizes.title4};
       }
       @media only screen and (min-width: 1200px) {
-        font-size: ${(props) => props.theme.fontSizes.title3};
+        font-size: ${(props) => props.theme.fontSizes.title4};
       }
     }
 

@@ -104,7 +104,7 @@ const ProjectContentCUView = ({ projectContents, toDeleteContent, onChangeProjec
                                                 ) : item.type == "gallery" ? (
                                                     <S.InputWrap>
                                                         <S.Label>이미지 갤러리</S.Label>
-                                                        <S.Description>권장사이즈 : 800 x auto / 지원파일 : jpg.png (최대 2MB) </S.Description>
+                                                        <S.Description>권장사이즈 : 800 x 400 / 지원파일 : jpg.png (최대 2MB) </S.Description>
                                                         <ImageGalleryUpload id={"imageGallery" + item.order} defaultImages={item.item} onImageUpload={(file: FileList[]) => item.item = file}
                                                             deleteItem={(content) => toDeleteContent(content)}
                                                         />
