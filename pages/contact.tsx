@@ -71,21 +71,7 @@ export default ContactPage;
 
 const MediaImageWrap = styled.div`
   margin: 0 auto;
-  @media only screen and (max-width: 600px) {
-    width: 26px;
-  }
-  @media only screen and (min-width: 600px) {
-    width: 34px;
-  }
-  @media only screen and (min-width: 768px) {
-    width: 34px;
-  }
-  @media only screen and (min-width: 992px) {
-    width: 34px;
-  }
-  @media only screen and (min-width: 1200px) {
-    width: 34px;
-  }
+  width: 50px;
 `
 const CustomPageMainContentMargin = styled(PageMainContentMargin)`
   display: flex;
@@ -123,8 +109,7 @@ const Contact = styled.li`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  border-radius: 15px;
-  border: 1px solid #E5E5E5;
+  border-radius: 100%;
   cursor: pointer;
   :hover{
     background-color: #E5E5E5;
@@ -135,22 +120,22 @@ const Contact = styled.li`
   }
   @media only screen and (max-width: 600px) {
     width: 130px;
-    height: 95px;
+    height: 130px;
     margin: 3px;
   }
   @media only screen and (min-width: 600px) and (max-width: 767px) {
-    width: 175px;
-    height: 125px;
+    width: 170px;
+    height: 170px;
     margin: 7px;
   }
   @media only screen and (min-width: 768px) {
-    width: 175px;
-    height: 125px;
+    width: 170px;
+    height: 170px;
     margin: 7px;
   }
   @media only screen and (min-width: 992px) {
-    width: 185px;
-    height: 135px;
+    width: 180px;
+    height: 180px;
     margin: 7px;
   }
 `
