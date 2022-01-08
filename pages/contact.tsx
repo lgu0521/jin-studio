@@ -113,29 +113,28 @@ const Contact = styled.li`
   cursor: pointer;
   :hover{
     background-color: #E5E5E5;
-    border: 1px solid #C5C4C4;
     ${Typography}{
         color: #898A8D;
     }
   }
   @media only screen and (max-width: 600px) {
-    width: 130px;
-    height: 130px;
+    width: 110px;
+    height: 110px;
     margin: 3px;
   }
   @media only screen and (min-width: 600px) and (max-width: 767px) {
-    width: 170px;
-    height: 170px;
+    width: 160px;
+    height: 160px;
     margin: 7px;
   }
   @media only screen and (min-width: 768px) {
-    width: 170px;
-    height: 170px;
+    width: 160px;
+    height: 160px;
     margin: 7px;
   }
   @media only screen and (min-width: 992px) {
-    width: 180px;
-    height: 180px;
+    width: 170px;
+    height: 170px;
     margin: 7px;
   }
 `
@@ -144,11 +143,11 @@ const ImageWrap = styled.div`
   align-self: flex-end;
   @media only screen and (max-width: 600px) {
     width: 180px;
-    align-self: flex-start;
+    align-self: center;
   }
   @media only screen and (min-width: 600px) and (max-width: 767px) {
     width: 250px;
-    align-self: flex-start;
+    align-self: center;
   }
   @media only screen and (min-width: 768px) {
     width: 300px;
