@@ -101,7 +101,7 @@ const ContactList = styled.ul`
 `
 const Typography = styled(Title5)`
   font-weight: 700;
-  color: #C5C4C4;
+  color: #AAAAAA;
 `
 
 const Contact = styled.li`
@@ -112,9 +112,9 @@ const Contact = styled.li`
   border-radius: 100%;
   cursor: pointer;
   :hover{
-    background-color: #E5E5E5;
+    background-color: #DFDEDE;
     ${Typography}{
-        color: #898A8D;
+        color: #737373;
     }
   }
   @media only screen and (max-width: 600px) {
