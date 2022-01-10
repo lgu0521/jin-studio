@@ -298,3 +298,6 @@ input {
 .react-datepicker__month-container{
   float: none !important;
 }
+
+
+.img {pointer-events : none;}
