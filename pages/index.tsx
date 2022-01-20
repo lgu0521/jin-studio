@@ -1,5 +1,5 @@
 //Basic
-import { GetStaticProps, NextPage } from "next";
+import { GetServerSideProps, NextPage } from "next";
 import { useState } from "react";
 import Head from 'next/head';
 //Component
@@ -47,7 +47,7 @@ const IndexPage: NextPage<Props> = ({ projectThumnailList, CatagoryList }) => {
   );
 };
 
-export const getStaticProps: GetStaticProps = async () => {
+export const getServerSideProps: GetServerSideProps = async () => {
   const resprojectThumnailList = await fetch(process.env.NEXT_PUBLIC_API_URL + "/api/project/thumnail");
   const projectThumnailList: ProjectSimpleDTO[] = await resprojectThumnailList.json();
 
