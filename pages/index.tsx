@@ -23,12 +23,10 @@ const IndexPage: NextPage<Props> = ({ projectThumnailList, CatagoryList }) => {
     <>
       <Head>
         <meta property="og:title" content="Studio Zinzin" />
-        <meta property="og:site_name" content="Studio Zinzin" />
-        <meta property="og:url" content="https://www.studiozinzin.com" />
-        <meta property="og:image" content="https://www.studiozinzin.com/image/ThumnailImage.jpeg" />
-        <meta property="og:image:width" content="800" />
-        <meta property="og:image:height" content="400" />
-        <meta property="og:description" content="Hyunjin Jung_Zinzin's artworks" key="description" />
+        <meta name="title" content="Studio Zinzin" />
+        <meta name="Keywords" content="스튜디오진진"/>
+        <meta name="Date" content="2022-01-05T07:45:37+09:00" />
+        <meta name="description" content="Welcome to Studio JinJin!!"/>
       </Head>
       <MainPageMaxNoCSSLayout>
         <Compontent1Wrap>
