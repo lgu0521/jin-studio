@@ -119,6 +119,7 @@ const NavUl = styled.ul<{ isClick: boolean }>`
 `;
 
 const NavLi = styled.li`
+  cursor: pointer;
   @media only screen and (max-width: 767px) {
     :nth-child(1){
       border-top: 1px solid black;
