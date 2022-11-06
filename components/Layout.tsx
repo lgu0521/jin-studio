@@ -60,10 +60,8 @@ const Layout = ({ children }: Props) => {
                 </a>
               </Link>
             </NavLi>
-            <NavLi>
-              <a href="http://www.multifunction.co.kr/official.php/home/info/2427" target="_blank">
-                <Title1>shop</Title1>
-              </a>
+            <NavLi onClick={() => alert("준비중 입니다")}>
+              <Title1>shop</Title1>
             </NavLi>
           </NavUl>
         </Nav>

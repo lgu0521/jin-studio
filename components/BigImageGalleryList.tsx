@@ -8,6 +8,7 @@ import Boomerang from "./Boomerang";
 interface Props {
   selectedCatagoryId: string;
 }
+
 const BigImageGalleryList = ({ selectedCatagoryId }: Props) => {
   const { thumNailImages, isLoading, isError } = getThumNailImage();
   if(isLoading){return <Boomerang/>};

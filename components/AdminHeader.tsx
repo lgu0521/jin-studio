@@ -1,14 +1,10 @@
 import { useRouter } from "next/dist/client/router";
-import Link from "next/link";
-import { useState } from "react";
 import styled from "styled-components";
 import { useAuth } from "../modules/AuthProvider";
 import { Title5 } from "../styles/design-system";
 
 const AdminHeader = () => {
   const { LoginOut } = useAuth();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalName, setModalName] = useState<string>("");
   const router = useRouter();
 
   return (

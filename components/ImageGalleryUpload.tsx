@@ -1,8 +1,7 @@
-import { DragDropContext, Draggable, Droppable, resetServerContext } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import Image from "next/image";
 import { useState } from "react";
 import styled from "styled-components";
-import DeleteFirestore from "../modules/DeleteFirestore";
 
 type Props = {
   id: string;

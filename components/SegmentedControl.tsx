@@ -76,8 +76,6 @@ const SegmentedUl = styled.ul`
   display: none;
   text-align: center;
   overflow: hidden;
-  //inline-block 여백없애기
- // margin-top: -1px;
   input{
     display:none;
   }
