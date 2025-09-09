@@ -75,6 +75,7 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
         catagory: projectCatagory == ''? '4WVJdAiJPVaBe9LGy039': projectCatagory,
         thumbnail: newThumnail,
         content: finalItemList,
+        datetime: new Date().getTime(), // 현재 시간을 타임스탬프로 저장
       }),
     });
 
@@ -97,12 +98,16 @@ const AdminCreateProject: NextPage<StaticProps> = ({ CatagoryList }) => {
           </S.InputWrap>
           <S.InputWrap>
             <S.Label>프로젝트 카테고리</S.Label>
-            <S.Select onChange={(e) => setProjectCatagory(e.target.value)} value={projectCatagory} defaultValue={CatagoryList[0].id}>
-              {CatagoryList.map((item, i) => (
-                <option value={item.id} key={i}>
-                  {item.name}
-                </option>
-              ))}
+            <S.Select onChange={(e) => setProjectCatagory(e.target.value)} value={projectCatagory} defaultValue={CatagoryList[0]?.id || ''}>
+              {CatagoryList && CatagoryList.length > 0 ? (
+                CatagoryList.map((item, i) => (
+                  <option value={item.id} key={i}>
+                    {item.name}
+                  </option>
+                ))
+              ) : (
+                <option value="">카테고리를 불러오는 중...</option>
+              )}
             </S.Select>
           </S.InputWrap>
           <S.InputWrap>

@@ -34,7 +34,41 @@ const AdminModifyProject: NextPage<GetStaticProps> = ({ catagoryList, projectCon
     const [formItemList, setFormItemList] = useState<ProjectTmpContentDTO[]>(projectContet.content ? projectContet.content : []);
     const [projectTitle, setProjectTitle] = useState<string>(projectContet.title ? projectContet.title : '');
     const [projectCatagory, setProjectCatagory] = useState<string>(projectContet.catagory ? projectContet.catagory : '');
-    const [projectCreateDate, setProjectCreateDate] = useState<any>(projectContet.datetime ? new Date(projectContet.datetime) : new Date());
+    const [projectCreateDate, setProjectCreateDate] = useState<any>(() => {
+        if (projectContet.datetime) {
+            try {
+                // 다양한 datetime 형식을 처리
+                let date;
+                if (typeof projectContet.datetime === 'string') {
+                    date = new Date(projectContet.datetime);
+                } else if (projectContet.datetime instanceof Date) {
+                    date = projectContet.datetime;
+                } else if (typeof projectContet.datetime === 'object' && projectContet.datetime.seconds) {
+                    // Firestore 타임스탬프인 경우 (seconds를 밀리초로 변환)
+                    date = new Date(projectContet.datetime.seconds * 1000);
+                } else if (typeof projectContet.datetime === 'object' && projectContet.datetime._seconds) {
+                    // 다른 Firestore 타임스탬프 형식
+                    date = new Date(projectContet.datetime._seconds * 1000);
+                } else if (typeof projectContet.datetime === 'number') {
+                    // 이미 타임스탬프인 경우
+                    date = new Date(projectContet.datetime);
+                } else {
+                    date = new Date(projectContet.datetime);
+                }
+                
+                // 유효한 날짜인지 확인
+                if (isNaN(date.getTime())) {
+                    console.warn('Invalid datetime, using current date:', projectContet.datetime);
+                    return new Date();
+                }
+                return date;
+            } catch (error) {
+                console.warn('Error parsing datetime, using current date:', error);
+                return new Date();
+            }
+        }
+        return new Date();
+    });
     const [projectThumbnailLocalUrl, setProjectThumbnailLocalUrl] = useState<any>(projectContet.thumbnail ? { ...projectContet.thumbnail } : null);
     const deleteContentList: any[] = [];
     console.log(projectContet.datetime);
@@ -83,7 +117,7 @@ const AdminModifyProject: NextPage<GetStaticProps> = ({ catagoryList, projectCon
                 catagory: projectCatagory,
                 thumbnail: newThumnail ? newThumnail : projectThumbnailLocalUrl,
                 content: finalItemList,
-                datetime: projectCreateDate
+                datetime: projectCreateDate.getTime() // Date 객체를 타임스탬프로 변환
             }),
         });
 
@@ -105,11 +139,15 @@ const AdminModifyProject: NextPage<GetStaticProps> = ({ catagoryList, projectCon
                     <S.InputWrap>
                         <S.Label>프로젝트 카테고리</S.Label>
                         <S.Select onChange={(e) => setProjectCatagory(e.target.value)} value={projectCatagory}>
-                            {catagoryList.map((item, i) => (
-                                <option value={item.id} key={i}>
-                                    {item.name}
-                                </option>
-                            ))}
+                            {catagoryList && catagoryList.length > 0 ? (
+                                catagoryList.map((item, i) => (
+                                    <option value={item.id} key={i}>
+                                        {item.name}
+                                    </option>
+                                ))
+                            ) : (
+                                <option value="">카테고리를 불러오는 중...</option>
+                            )}
                         </S.Select>
                     </S.InputWrap>
                     <S.InputWrap>
@@ -122,8 +160,12 @@ const AdminModifyProject: NextPage<GetStaticProps> = ({ catagoryList, projectCon
                         <S.Description>프로젝트 생성 날짜를 설정해주세요</S.Description>
                         <S.CalendarWrap>
                         <DatePicker
-                            selected={projectCreateDate}
-                            onChange={setProjectCreateDate}
+                            selected={projectCreateDate && !isNaN(projectCreateDate.getTime()) ? projectCreateDate : new Date()}
+                            onChange={(date) => {
+                                if (date && !isNaN(date.getTime())) {
+                                    setProjectCreateDate(date);
+                                }
+                            }}
                             showTimeInput
                             dateFormat="Pp"
                         />
